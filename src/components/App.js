@@ -1,20 +1,21 @@
 import React from 'react';
 import { Match } from 'react-router';
+import { Provider } from 'react-redux';
 import Landing from './Landing';
-
-if (global) {
-  global.System = { import () {} };
-}
+import configureStore from '../store';
+const store = configureStore();
 
 const App = () => {
   return (
-    <div className='app'>
-      <Match
-        exactly
-        pattern='/'
-        component={Landing}
-      />
-    </div>
+    <Provider store={store}>
+      <div className='app'>
+        <Match
+          exactly
+          pattern='/'
+          component={Landing}
+        />
+      </div>
+    </Provider>
   );
 };
 

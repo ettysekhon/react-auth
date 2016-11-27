@@ -14,11 +14,14 @@
     "express": "4.14.0",
     "history": "^4.4.0",
     "lodash": "4.16.2",
+    "object-assign": "^4.1.0",
     "react": "next",
     "react-dom": "^15.4.0",
     "react-redux": "^4.4.6",
     "react-router": "next",
     "redux": "^3.6.0",
+    "redux-logger": "^2.7.4",
+    "redux-thunk": "^2.1.0",
     "tachyons": "^4.5.5"
   },
   "devDependencies": {
