@@ -5,8 +5,7 @@ module.exports = {
   entry: './src/index.js',
   devtool: 'source-map',
   output: {
-    path: path.join(__dirname, '/public'),
-    publicPath: '/public/',
+    path: path.join(__dirname, '/dist'),
     filename: 'bundle.js'
   },
   resolve: {
@@ -16,10 +15,6 @@ module.exports = {
     colors: true,
     reasons: true,
     chunks: false
-  },
-  devServer: {
-    publicPath: '/public/',
-    historyApiFallback: true
   },
   module: {
     rules: [

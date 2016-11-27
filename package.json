@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "webpack",
-    "dev": "webpack-dev-server",
+    "dev": "NODE_ENV=development node index",
     "lint": "eslint src/**/*.js index.js",
     "watch": "webpack --watch"
   },
@@ -42,7 +42,6 @@
     "eslint-plugin-standard": "2.0.0",
     "json-loader": "0.5.4",
     "style-loader": "0.13.1",
-    "webpack": "2.1.0-beta.25",
-    "webpack-dev-server": "1.16.2"
+    "webpack": "2.1.0-beta.25"
   }
 }
