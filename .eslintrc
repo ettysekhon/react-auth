@@ -1,0 +1,12 @@
+{
+  "extends": ["standard", "standard-react"],
+  "rules": {
+    "indent": [1, 2],
+    "no-console": 0,
+    "no-unused-vars": [1, {"vars": "local", "args": "none"}],
+    "comma-dangle": 0,
+    "no-use-before-define": 0,
+    "id-length": 0,
+    "semi": ["error", "always"]
+  }
+}
