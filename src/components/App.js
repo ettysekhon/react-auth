@@ -5,6 +5,10 @@ import Landing from './Landing';
 import configureStore from '../store';
 const store = configureStore();
 
+// TODO: REMOVE REDUX TEST
+import { loginRequest } from '../actions/login';
+store.dispatch(loginRequest());
+
 const App = () => {
   return (
     <Provider store={store}>

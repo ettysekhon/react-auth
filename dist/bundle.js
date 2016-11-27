@@ -14201,9 +14201,15 @@ var _store = __webpack_require__(552);
 
 var _store2 = _interopRequireDefault(_store);
 
+var _login = __webpack_require__(559);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var store = (0, _store2.default)();
+
+// TODO: REMOVE REDUX TEST
+
+store.dispatch((0, _login.loginRequest)());
 
 var App = function App() {
   return _react2.default.createElement(
@@ -37980,6 +37986,28 @@ module.exports = {
   LOGIN_REQUEST: 'LOGIN_REQUEST',
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_FAILURE: 'LOGIN_FAILURE'
+};
+
+/***/ },
+/* 559 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.loginRequest = undefined;
+
+var _types = __webpack_require__(558);
+
+var _types2 = _interopRequireDefault(_types);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var loginRequest = exports.loginRequest = function loginRequest() {
+  return { type: _types2.default.LOGIN_REQUEST };
 };
 
 /***/ }
