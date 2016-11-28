@@ -5,8 +5,10 @@ const app = (state = {
   error: null,
   isFetching: false,
   loggedIn: false,
+  nextPathName: '/',
   token: '',
-  user: {}
+  user: {},
+  router: null
 }, action) => {
   switch (action.type) {
   case ActionTypes.LOGIN_REQUEST:
@@ -28,6 +30,14 @@ const app = (state = {
       loggedIn: false,
       token: '',
       user: {},
+    });
+  case ActionTypes.NEXT_PATH_NAME:
+    return objectAssign({}, state, {
+      nextPathName: action.payload.nextPathName || '/'
+    });
+  case ActionTypes.SET_ROUTER:
+    return objectAssign({}, state, {
+      router: action.payload.router
     });
   default:
     return state;
