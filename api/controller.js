@@ -50,7 +50,8 @@ exports.login = (req, res, next) => {
   // TODO: check if user is already signed in!
   const password = req.body.password;
   const username = req.body.username;
-
+  console.log('password', password);
+  console.log('username', username);
   if (!password || !username) {
     return res.sendStatus(400);
   }
@@ -108,12 +109,12 @@ exports.signup = (req, res, next) => {
   }
 };
 
-exports.getAccounts = () => {
-  return {
+exports.getAccounts = (req, res) => {
+  return res.json({
     payload: {
       accounts
     }
-  };
+  });
 };
 
 exports.getAccount = (req, res, next) => {

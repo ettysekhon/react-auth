@@ -1,18 +1,9 @@
 export default (type) => {
-  return (payload, error, analyticsEventType, analyticsEventPayload) => {
-    const ret = {
+  return (payload, error) => {
+    return {
       type,
       payload,
       error
     };
-    if (analyticsEventType) {
-      ret.meta = {
-        analytics: {
-          type: analyticsEventType,
-          payload: analyticsEventPayload
-        }
-      };
-    }
-    return ret;
   };
 };
