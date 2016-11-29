@@ -10,9 +10,11 @@
     "watch": "webpack --watch"
   },
   "dependencies": {
-    "axios": "0.15.2",
+    "body-parser": "^1.15.2",
+    "bunyan": "^1.8.5",
     "express": "4.14.0",
     "history": "^4.4.0",
+    "jsonwebtoken": "^7.1.9",
     "lodash": "4.16.2",
     "object-assign": "^4.1.0",
     "react": "next",

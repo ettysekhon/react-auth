@@ -6,7 +6,7 @@ import express from 'express';
 // const template = _.template(baseTemplate);
 
 const app = express();
-const port = process.env.PORT || 8082;
+const port = process.env.PORT || 3001;
 
 const setCacheControl = (res) => {
   res.setHeader('Cache-Control', 'public, max-age=31536000, no-cache');
