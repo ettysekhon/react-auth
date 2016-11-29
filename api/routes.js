@@ -1,7 +1,7 @@
 const express = require('express');
-const apiController = require('./server-api.controller');
+const apiController = require('./controller');
 const router = express.Router(); // eslint-disable-line
-const middleware = require('./server-api.middleware.js');
+const middleware = require('./middleware.js');
 const verifyCredentials = middleware.verifyCredentials;
 
 const errorIfNoToken = true;

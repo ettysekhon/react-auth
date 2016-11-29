@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const config = require('./server-api.config');
-const logger = require('./server-api.logger');
+const config = require('./config');
+const logger = require('./logger');
 
 /* eslint-disable consistent-return */
 exports.verifyCredentials = (errorIfNoToken) => {

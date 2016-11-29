@@ -1,4 +1,4 @@
-const config = require('./server-api.config');
+const config = require('./config');
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid');
 

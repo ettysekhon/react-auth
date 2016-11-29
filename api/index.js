@@ -1,8 +1,8 @@
 /* eslint no-console:0 */
 const express = require('express');
 const bodyParser = require('body-parser');
-const api = require('./server-api.routes');
-const middleware = require('./server-api.middleware.js');
+const routes = require('./routes');
+const middleware = require('./middleware.js');
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 
 app.use(middleware.requestLogger);
 
-app.use('/api', api);
+app.use('/api', routes);
 
 // route not found
 app.use((req, res) => {
