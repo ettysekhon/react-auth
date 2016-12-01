@@ -3,7 +3,7 @@ import fetch from 'isomorphic-fetch';
 const getEndpoint = (path) => {
   const test = true;
   const host = test === true
-    ? 'http://localhost:8082/web-api/'
+    ? 'http://localhost:8080/api/'
     : 'http://eric.kicks-ass.org/web-api/';
   return `${host}${path}`;
 };

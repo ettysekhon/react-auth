@@ -44,8 +44,8 @@ const UnProtectedView = () => {
   );
 };
 
-const Main = ({ isLoggedIn }) => {
-  return isLoggedIn ? (
+const Main = ({ loggedIn }) => {
+  return loggedIn ? (
     <ProtectedView />
   ) : (
     <UnProtectedView />
@@ -53,11 +53,11 @@ const Main = ({ isLoggedIn }) => {
 };
 
 Main.defaultProps = {
-  isLoggedIn: false
+  loggedIn: false
 };
 
 Main.propTypes = {
-  isLoggedIn: React.PropTypes.bool
+  loggedIn: React.PropTypes.bool
 };
 
 export default Main;
