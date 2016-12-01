@@ -8,7 +8,8 @@ const app = (state = {
   nextPathName: '/',
   token: '',
   user: {},
-  router: null
+  router: null,
+  redirectToReferrer: false
 }, action) => {
   switch (action.type) {
   case ActionTypes.LOGIN_REQUEST:

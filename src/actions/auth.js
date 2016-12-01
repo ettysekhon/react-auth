@@ -2,9 +2,9 @@ import ActionTypes from './types.js';
 import createAction from './createAction';
 
 const loginRequest = createAction(ActionTypes.LOGIN_REQUEST);
-const loginSuccess = createAction(ActionTypes.LOGIN_SUCCESS);
-const loginFailure = createAction(ActionTypes.LOGIN_FAILURE);
-const nextPathName = createAction(ActionTypes.NEXT_PATH_NAME);
+// const loginSuccess = createAction(ActionTypes.LOGIN_SUCCESS);
+// const loginFailure = createAction(ActionTypes.LOGIN_FAILURE);
+// const nextPathName = createAction(ActionTypes.NEXT_PATH_NAME);
 
 export const login = (username, password) => {
   return (dispatch, getState) => {

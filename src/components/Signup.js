@@ -1,15 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 
-class Login extends Component {
+class Signup extends Component {
   constructor (props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   handleSubmit (event) {
     event.preventDefault();
+
+    const company = this.refs.company.value;
     const username = this.refs.username.value;
     const password = this.refs.password.value;
-    this.props.login(username, password);
+
+    this.props.signup(company, username, password);
   }
 
   render () {
@@ -20,8 +23,21 @@ class Login extends Component {
             fontSize: '20px',
             paddingBottom: '10px'
           }}
-        >Login Page</h2>
+        >Signup Page</h2>
         <form onSubmit={this.handleSubmit}>
+          <label>
+            <input
+              placeholder='Enter company'
+              ref='company'
+              style={{
+                padding: '10px',
+                border: '1px solid #ccc',
+                borderRadius: '5px',
+                marginRight: '5px',
+                marginBottom: '10px'
+              }}
+            />
+          </label>
           <label>
             <input
               placeholder='Enter username'
@@ -54,10 +70,10 @@ class Login extends Component {
             styleType={'primary'}
             type={'submit'}
           >
-            Login
+            Signup
           </button>
           {this.props.error && (
-            <p>Enter correct username & password</p>
+            <p>Signup failed please try again</p>
           )}
         </form>
       </div>
@@ -65,60 +81,11 @@ class Login extends Component {
   }
 }
 
-Login.displayName = 'Login';
+Signup.displayName = 'Signup';
 
-Login.propTypes = {
+Signup.propTypes = {
   error: PropTypes.bool.isRequired,
-  login: PropTypes.func.isRequired
+  signup: PropTypes.func.isRequired
 };
 
-export default Login;
-
-// <li><Link to='/dashboard'>Dashboard</Link></li>
-//
-// <Match
-//   pattern='/dashboard'
-//   component={Dashboard}
-// />
-
-// export default Login;
-
-// import React from 'react';
-// import { Redirect } from 'react-router';
-//
-// class Login extends React.Component {
-//   constructor () {
-//     super();
-//     this.state = {
-//       redirectToReferrer: false
-//     };
-//   }
-//   login () {
-//     fakeAuth.authenticate(() => {
-//       this.setState({ redirectToReferrer: true });
-//     });
-//   }
-//
-//   render () {
-//     const { from } = this.props.location.state || '/';
-//     const { redirectToReferrer } = this.state;
-//
-//     return (
-//       <div>
-//         {redirectToReferrer && (
-//           <Redirect to={from || '/'}
-//           />
-//         )}
-//         {from && (
-//           <p>
-//             You must log in to view the page at
-//             <code>{from.pathname}</code>
-//           </p>
-//         )}
-//         <button onClick={this.login}>Log in</button>
-//       </div>
-//     );
-//   }
-// };
-//
-// export default Login;
+export default Signup;
