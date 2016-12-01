@@ -7,19 +7,16 @@ const Dashboard = ({ pathname }) => (
   <div>
     <h2>Dashboard</h2>
     <ul>
-      <li><Link to={`${pathname}/access-logs`}>Access Logs</Link></li>
-      <li><Link to={`${pathname}/accounts`}>Accounts</Link></li>
+      <li><Link to={`/access-logs`}>Access Logs</Link></li>
+      <li><Link to={`/accounts`}>Accounts</Link></li>
     </ul>
-
     <Match
       component={AccessLogs}
-      pattern={`${pathname}/access-logs`}
+      pattern={`/access-logs`}
     />
     <Match
       component={Accounts}
-      pattern={`${pathname}/accounts`}
-    />
-    <Match pattern={pathname} exactly component={Accounts}
+      pattern={`/accounts`}
     />
     <Miss component={Accounts}
     />

@@ -14827,25 +14827,11 @@ var _react = __webpack_require__(9);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = __webpack_require__(99);
-
 var _reactRedux = __webpack_require__(520);
 
-var _Landing = __webpack_require__(408);
+var _Main = __webpack_require__(569);
 
-var _Landing2 = _interopRequireDefault(_Landing);
-
-var _Dashboard = __webpack_require__(407);
-
-var _Dashboard2 = _interopRequireDefault(_Dashboard);
-
-var _Login = __webpack_require__(563);
-
-var _Login2 = _interopRequireDefault(_Login);
-
-var _Signup = __webpack_require__(564);
-
-var _Signup2 = _interopRequireDefault(_Signup);
+var _Main2 = _interopRequireDefault(_Main);
 
 var _store = __webpack_require__(411);
 
@@ -14883,56 +14869,7 @@ var App = function (_React$Component) {
       return _react2.default.createElement(
         _reactRedux.Provider,
         { store: store },
-        _react2.default.createElement(
-          'div',
-          { className: 'app' },
-          _react2.default.createElement(
-            'ul',
-            null,
-            _react2.default.createElement(
-              'li',
-              null,
-              _react2.default.createElement(
-                _reactRouter.Link,
-                { to: '/' },
-                'Home'
-              )
-            ),
-            _react2.default.createElement(
-              'li',
-              null,
-              _react2.default.createElement(
-                _reactRouter.Link,
-                { to: '/login' },
-                'Login'
-              )
-            ),
-            _react2.default.createElement(
-              'li',
-              null,
-              _react2.default.createElement(
-                _reactRouter.Link,
-                { to: '/signup' },
-                'Signup'
-              )
-            )
-          ),
-          _react2.default.createElement(_reactRouter.Match, {
-            exactly: true,
-            pattern: '/',
-            component: _Landing2.default
-          }),
-          _react2.default.createElement(_reactRouter.Match, {
-            pattern: '/signup',
-            component: _Signup2.default
-          }),
-          _react2.default.createElement(_reactRouter.Match, {
-            pattern: '/login',
-            component: _Login2.default
-          }),
-          _react2.default.createElement(_reactRouter.Miss, { component: _Landing2.default
-          })
-        )
+        _react2.default.createElement(_Main2.default, null)
       );
     }
   }]);
@@ -20113,7 +20050,7 @@ var Dashboard = function Dashboard(_ref) {
         null,
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: pathname + '/access-logs' },
+          { to: '/access-logs' },
           'Access Logs'
         )
       ),
@@ -20122,20 +20059,18 @@ var Dashboard = function Dashboard(_ref) {
         null,
         _react2.default.createElement(
           _reactRouter.Link,
-          { to: pathname + '/accounts' },
+          { to: '/accounts' },
           'Accounts'
         )
       )
     ),
     _react2.default.createElement(_reactRouter.Match, {
       component: _AccessLogs2.default,
-      pattern: pathname + '/access-logs'
+      pattern: '/access-logs'
     }),
     _react2.default.createElement(_reactRouter.Match, {
       component: _Accounts2.default,
-      pattern: pathname + '/accounts'
-    }),
-    _react2.default.createElement(_reactRouter.Match, { pattern: pathname, exactly: true, component: _Accounts2.default
+      pattern: '/accounts'
     }),
     _react2.default.createElement(_reactRouter.Miss, { component: _Accounts2.default
     })
@@ -38395,8 +38330,6 @@ var Login = function (_Component) {
           _react2.default.createElement(
             'button',
             {
-              fillType: 'outline',
-              styleType: 'primary',
               type: 'submit'
             },
             'Login'
@@ -38588,8 +38521,6 @@ var Signup = function (_Component) {
           _react2.default.createElement(
             'button',
             {
-              fillType: 'outline',
-              styleType: 'primary',
               type: 'submit'
             },
             'Signup'
@@ -38615,6 +38546,268 @@ Signup.propTypes = {
 };
 
 exports.default = Signup;
+
+/***/ },
+/* 565 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.login = undefined;
+
+var _types = __webpack_require__(178);
+
+var _types2 = _interopRequireDefault(_types);
+
+var _createAction = __webpack_require__(566);
+
+var _createAction2 = _interopRequireDefault(_createAction);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var loginRequest = (0, _createAction2.default)(_types2.default.LOGIN_REQUEST);
+// const loginSuccess = createAction(ActionTypes.LOGIN_SUCCESS);
+// const loginFailure = createAction(ActionTypes.LOGIN_FAILURE);
+// const nextPathName = createAction(ActionTypes.NEXT_PATH_NAME);
+
+var login = exports.login = function login(username, password) {
+  return function (dispatch, getState) {
+    var _getState = getState(),
+        app = _getState.app;
+
+    dispatch(loginRequest({
+      username: username,
+      password: password
+    }));
+  };
+  // return (dispatch, getState) => {
+  //   const { app } = getState();
+  //   dispatch(loginRequest({
+  //     username,
+  //     password
+  //   }));
+  //   API.login(username, password)
+  //   .then((payload) => {
+  //     dispatch(loginSuccess({
+  //       isLoggedIn: true,
+  //       user: payload.user,
+  //       token: payload.token
+  //     }));
+  //     if (app.nextPathName) {
+  //       routeReplace(app.nextPathName);
+  //     } else {
+  //       routeReplace('/');
+  //     }
+  //   }).catch((err) => {
+  //     dispatch(loginFailure(null, err));
+  //   });
+  // };
+};
+
+/***/ },
+/* 566 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (type) {
+  return function (payload, error) {
+    return {
+      type: type,
+      payload: payload,
+      error: error
+    };
+  };
+};
+
+/***/ },
+/* 567 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Login = __webpack_require__(563);
+
+var _Login2 = _interopRequireDefault(_Login);
+
+var _auth = __webpack_require__(565);
+
+var _reactRedux = __webpack_require__(520);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var select = function select(state) {
+  return {
+    error: !!state.app.error
+  };
+};
+var actions = function actions(dispatch) {
+  return {
+    login: function login(username, password) {
+      dispatch((0, _auth.login)(username, password));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(select, actions)(_Login2.default);
+
+/***/ },
+/* 568 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Signup = __webpack_require__(564);
+
+var _Signup2 = _interopRequireDefault(_Signup);
+
+var _auth = __webpack_require__(565);
+
+var _reactRedux = __webpack_require__(520);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var select = function select(state) {
+  return {
+    error: !!state.app.error
+  };
+};
+var actions = function actions(dispatch) {
+  return {
+    signup: function signup(company, username, password) {
+      dispatch((0, _auth.signup)(company, username, password));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(select, actions)(_Signup2.default);
+
+/***/ },
+/* 569 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(9);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = __webpack_require__(99);
+
+var _Landing = __webpack_require__(408);
+
+var _Landing2 = _interopRequireDefault(_Landing);
+
+var _Login = __webpack_require__(567);
+
+var _Login2 = _interopRequireDefault(_Login);
+
+var _Signup = __webpack_require__(568);
+
+var _Signup2 = _interopRequireDefault(_Signup);
+
+var _Dashboard = __webpack_require__(407);
+
+var _Dashboard2 = _interopRequireDefault(_Dashboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var ProtectedView = function ProtectedView() {
+  return _react2.default.createElement(
+    'div',
+    { className: 'app' },
+    _react2.default.createElement(_reactRouter.Match, {
+      pattern: '/',
+      component: _Dashboard2.default
+    }),
+    _react2.default.createElement(_reactRouter.Miss, { component: _Dashboard2.default
+    })
+  );
+};
+
+var UnProtectedView = function UnProtectedView() {
+  return _react2.default.createElement(
+    'div',
+    { className: 'app' },
+    _react2.default.createElement(
+      'ul',
+      null,
+      _react2.default.createElement(
+        'li',
+        null,
+        _react2.default.createElement(
+          _reactRouter.Link,
+          { to: '/login' },
+          'Login'
+        )
+      ),
+      _react2.default.createElement(
+        'li',
+        null,
+        _react2.default.createElement(
+          _reactRouter.Link,
+          { to: '/signup' },
+          'Signup'
+        )
+      )
+    ),
+    _react2.default.createElement(_reactRouter.Match, {
+      exactly: true,
+      pattern: '/',
+      component: _Landing2.default
+    }),
+    _react2.default.createElement(_reactRouter.Match, {
+      pattern: '/signup',
+      component: _Signup2.default
+    }),
+    _react2.default.createElement(_reactRouter.Match, {
+      pattern: '/login',
+      component: _Login2.default
+    }),
+    _react2.default.createElement(_reactRouter.Miss, { component: _Landing2.default
+    })
+  );
+};
+
+var Main = function Main(_ref) {
+  var isLoggedIn = _ref.isLoggedIn;
+
+  return isLoggedIn ? _react2.default.createElement(ProtectedView, null) : _react2.default.createElement(UnProtectedView, null);
+};
+
+Main.defaultProps = {
+  isLoggedIn: false
+};
+
+Main.propTypes = {
+  isLoggedIn: _react2.default.PropTypes.bool
+};
+
+exports.default = Main;
 
 /***/ }
 /******/ ]);

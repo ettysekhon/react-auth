@@ -66,8 +66,6 @@ class Signup extends Component {
           </label>
           <br />
           <button
-            fillType={'outline'}
-            styleType={'primary'}
             type={'submit'}
           >
             Signup

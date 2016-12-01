@@ -8,6 +8,7 @@ const loginRequest = createAction(ActionTypes.LOGIN_REQUEST);
 
 export const login = (username, password) => {
   return (dispatch, getState) => {
+    const { app } = getState();
     dispatch(loginRequest({
       username,
       password

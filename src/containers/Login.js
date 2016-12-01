@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 const select = (state) => {
   return {
-    error: !!state.auth.error
+    error: !!state.app.error
   };
 };
 const actions = (dispatch) => {

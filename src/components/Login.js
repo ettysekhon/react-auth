@@ -11,7 +11,6 @@ class Login extends Component {
     const password = this.refs.password.value;
     this.props.login(username, password);
   }
-
   render () {
     return (
       <div>
@@ -50,8 +49,6 @@ class Login extends Component {
           </label>
           <br />
           <button
-            fillType={'outline'}
-            styleType={'primary'}
             type={'submit'}
           >
             Login
