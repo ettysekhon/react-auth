@@ -7,14 +7,11 @@ class Signup extends Component {
   }
   handleSubmit (event) {
     event.preventDefault();
-
-    const company = this.refs.company.value;
+    const emailAddress = this.refs.emailAddress.value;
     const username = this.refs.username.value;
     const password = this.refs.password.value;
-
-    this.props.signup(company, username, password);
+    this.props.signup(emailAddress, username, password);
   }
-
   render () {
     return (
       <div>
@@ -27,8 +24,8 @@ class Signup extends Component {
         <form onSubmit={this.handleSubmit}>
           <label>
             <input
-              placeholder='Enter company'
-              ref='company'
+              placeholder='Enter email address'
+              ref='emailAddress'
               style={{
                 padding: '10px',
                 border: '1px solid #ccc',

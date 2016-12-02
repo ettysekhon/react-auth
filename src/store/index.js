@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import rootReducer from '../reducers';
 
-const configureStore = preloadedState => {
+export const configureStore = preloadedState => {
   const store = createStore(
     rootReducer,
     preloadedState,

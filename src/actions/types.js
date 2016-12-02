@@ -5,6 +5,14 @@ module.exports = {
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_FAILURE: 'LOGIN_FAILURE',
   // -------------------------------------------------------------------------->
+  LOGOUT_REQUEST: 'LOGOUT_REQUEST',
+  LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
+  LOGOUT_FAILURE: 'LOGOUT_FAILURE',
+  // -------------------------------------------------------------------------->
+  SIGNUP_REQUEST: 'SIGNUP_REQUEST',
+  SIGNUP_SUCCESS: 'SIGNUP_SUCCESS',
+  SIGNUP_FAILURE: 'SIGNUP_FAILURE',
+  // -------------------------------------------------------------------------->
   // SYNC.
   // -------------------------------------------------------------------------->
   NEXT_PATH_NAME: 'NEXT_PATH_NAME',

@@ -11222,6 +11222,14 @@ module.exports = {
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_FAILURE: 'LOGIN_FAILURE',
   // -------------------------------------------------------------------------->
+  LOGOUT_REQUEST: 'LOGOUT_REQUEST',
+  LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
+  LOGOUT_FAILURE: 'LOGOUT_FAILURE',
+  // -------------------------------------------------------------------------->
+  SIGNUP_REQUEST: 'SIGNUP_REQUEST',
+  SIGNUP_SUCCESS: 'SIGNUP_SUCCESS',
+  SIGNUP_FAILURE: 'SIGNUP_FAILURE',
+  // -------------------------------------------------------------------------->
   // SYNC.
   // -------------------------------------------------------------------------->
   NEXT_PATH_NAME: 'NEXT_PATH_NAME',
@@ -14821,64 +14829,99 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _react = __webpack_require__(9);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(520);
+var _reactRouter = __webpack_require__(99);
 
-var _Main = __webpack_require__(573);
+var _Landing = __webpack_require__(408);
 
-var _Main2 = _interopRequireDefault(_Main);
+var _Landing2 = _interopRequireDefault(_Landing);
 
-var _store = __webpack_require__(411);
+var _Login = __webpack_require__(567);
 
-var _store2 = _interopRequireDefault(_store);
+var _Login2 = _interopRequireDefault(_Login);
 
-var _app = __webpack_require__(404);
+var _Signup = __webpack_require__(568);
+
+var _Signup2 = _interopRequireDefault(_Signup);
+
+var _Dashboard = __webpack_require__(407);
+
+var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var ProtectedView = function ProtectedView() {
+  return _react2.default.createElement(
+    'div',
+    { className: 'app' },
+    _react2.default.createElement(_reactRouter.Match, {
+      pattern: '/',
+      component: _Dashboard2.default
+    }),
+    _react2.default.createElement(_reactRouter.Miss, { component: _Dashboard2.default
+    })
+  );
+};
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var UnProtectedView = function UnProtectedView() {
+  return _react2.default.createElement(
+    'div',
+    { className: 'app' },
+    _react2.default.createElement(
+      'ul',
+      null,
+      _react2.default.createElement(
+        'li',
+        null,
+        _react2.default.createElement(
+          _reactRouter.Link,
+          { to: '/login' },
+          'Login'
+        )
+      ),
+      _react2.default.createElement(
+        'li',
+        null,
+        _react2.default.createElement(
+          _reactRouter.Link,
+          { to: '/signup' },
+          'Signup'
+        )
+      )
+    ),
+    _react2.default.createElement(_reactRouter.Match, {
+      exactly: true,
+      pattern: '/',
+      component: _Landing2.default
+    }),
+    _react2.default.createElement(_reactRouter.Match, {
+      pattern: '/signup',
+      component: _Signup2.default
+    }),
+    _react2.default.createElement(_reactRouter.Match, {
+      pattern: '/login',
+      component: _Login2.default
+    }),
+    _react2.default.createElement(_reactRouter.Miss, { component: _Landing2.default
+    })
+  );
+};
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+var App = function App(_ref) {
+  var loggedIn = _ref.loggedIn;
 
-var store = (0, _store2.default)();
+  return loggedIn ? _react2.default.createElement(ProtectedView, null) : _react2.default.createElement(UnProtectedView, null);
+};
 
-var App = function (_React$Component) {
-  _inherits(App, _React$Component);
-
-  function App(props) {
-    _classCallCheck(this, App);
-
-    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
-
-    if (_this.props.router) {
-      store.dispatch((0, _app.setRouter)(_this.props.router));
-    }
-    return _this;
-  }
-
-  _createClass(App, [{
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        _reactRedux.Provider,
-        { store: store },
-        _react2.default.createElement(_Main2.default, null)
-      );
-    }
-  }]);
-
-  return App;
-}(_react2.default.Component);
+App.defaultProps = {
+  loggedIn: false
+};
 
 App.propTypes = {
-  router: _react2.default.PropTypes.object
+  loggedIn: _react2.default.PropTypes.bool
 };
 
 exports.default = App;
@@ -19907,6 +19950,23 @@ var setRouter = exports.setRouter = function setRouter(router) {
   };
 };
 
+// export const registerInterest = (firstName, lastName, company, emailAddress) => {
+//   return (dispatch, getState) => {
+//     dispatch(signupRequest());
+//     API.signup(emailAddress, username, password)
+//     .then((payload) => {
+//       dispatch(signupSuccess({
+//         isLoggedIn: true,
+//         user: payload.user,
+//         token: payload.token
+//       }));
+//       nextRoute(getState, '/');
+//     }).catch((err) => {
+//       dispatch(signupFailure(null, err));
+//     });
+//   };
+// };
+
 /***/ },
 /* 405 */
 /***/ function(module, exports, __webpack_require__) {
@@ -20217,6 +20277,7 @@ exports.default = (0, _redux.combineReducers)({
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.configureStore = undefined;
 
 var _redux = __webpack_require__(149);
 
@@ -20234,7 +20295,7 @@ var _reducers2 = _interopRequireDefault(_reducers);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var configureStore = function configureStore(preloadedState) {
+var configureStore = exports.configureStore = function configureStore(preloadedState) {
   var store = (0, _redux.createStore)(_reducers2.default, preloadedState, (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2.default, (0, _reduxLogger2.default)())));
 
   if (false) {
@@ -38213,22 +38274,20 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__(221);
 
-var _reactDom2 = _interopRequireDefault(_reactDom);
+var _Root = __webpack_require__(574);
 
-var _App = __webpack_require__(220);
-
-var _App2 = _interopRequireDefault(_App);
+var _Root2 = _interopRequireDefault(_Root);
 
 var _reactRouter = __webpack_require__(99);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom2.default.render(_react2.default.createElement(
+(0, _reactDom.render)(_react2.default.createElement(
   _reactRouter.BrowserRouter,
   null,
   function (_ref) {
     var router = _ref.router;
-    return _react2.default.createElement(_App2.default, { router: router });
+    return _react2.default.createElement(_Root2.default, { router: router });
   }
 ), document.getElementById('app'));
 
@@ -38446,12 +38505,10 @@ var Signup = function (_Component) {
     key: 'handleSubmit',
     value: function handleSubmit(event) {
       event.preventDefault();
-
-      var company = this.refs.company.value;
+      var emailAddress = this.refs.emailAddress.value;
       var username = this.refs.username.value;
       var password = this.refs.password.value;
-
-      this.props.signup(company, username, password);
+      this.props.signup(emailAddress, username, password);
     }
   }, {
     key: 'render',
@@ -38476,8 +38533,8 @@ var Signup = function (_Component) {
             'label',
             null,
             _react2.default.createElement('input', {
-              placeholder: 'Enter company',
-              ref: 'company',
+              placeholder: 'Enter email address',
+              ref: 'emailAddress',
               style: {
                 padding: '10px',
                 border: '1px solid #ccc',
@@ -38557,7 +38614,7 @@ exports.default = Signup;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.login = undefined;
+exports.signup = exports.login = undefined;
 
 var _types = __webpack_require__(178);
 
@@ -38576,7 +38633,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var loginRequest = (0, _createAction2.default)(_types2.default.LOGIN_REQUEST);
 var loginSuccess = (0, _createAction2.default)(_types2.default.LOGIN_SUCCESS);
 var loginFailure = (0, _createAction2.default)(_types2.default.LOGIN_FAILURE);
-// const nextPathName = createAction(ActionTypes.NEXT_PATH_NAME);
+
+var signupRequest = (0, _createAction2.default)(_types2.default.SIGNUP_REQUEST);
+var signupSuccess = (0, _createAction2.default)(_types2.default.SIGNUP_SUCCESS);
+var signupFailure = (0, _createAction2.default)(_types2.default.SIGNUP_FAILURE);
+
+var logoutRequest = (0, _createAction2.default)(_types2.default.LOGOUT_REQUEST);
+var logoutSuccess = (0, _createAction2.default)(_types2.default.LOGOUT_SUCCESS);
+var logoutFailure = (0, _createAction2.default)(_types2.default.LOGOUT_FAILURE);
+
+var nextRoute = function nextRoute(getState, path) {
+  var _getState = getState(),
+      app = _getState.app;
+
+  var router = app && app.router;
+  if (router) {
+    router.replaceWith('/');
+  }
+};
 
 var login = exports.login = function login(username, password) {
   return function (dispatch, getState) {
@@ -38590,16 +38664,25 @@ var login = exports.login = function login(username, password) {
         user: payload.user,
         token: payload.token
       }));
-
-      var _getState = getState(),
-          app = _getState.app;
-
-      var router = app && app.router;
-      if (router) {
-        router.replaceWith('/');
-      }
+      nextRoute(getState, '/');
     }).catch(function (err) {
       dispatch(loginFailure(null, err));
+    });
+  };
+};
+
+var signup = exports.signup = function signup(emailAddress, username, password) {
+  return function (dispatch, getState) {
+    dispatch(signupRequest());
+    _api2.default.signup(emailAddress, username, password).then(function (payload) {
+      dispatch(signupSuccess({
+        isLoggedIn: true,
+        user: payload.user,
+        token: payload.token
+      }));
+      nextRoute(getState, '/');
+    }).catch(function (err) {
+      dispatch(signupFailure(null, err));
     });
   };
 };
@@ -38698,114 +38781,7 @@ var actions = function actions(dispatch) {
 exports.default = (0, _reactRedux.connect)(select, actions)(_Signup2.default);
 
 /***/ },
-/* 569 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _react = __webpack_require__(9);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouter = __webpack_require__(99);
-
-var _Landing = __webpack_require__(408);
-
-var _Landing2 = _interopRequireDefault(_Landing);
-
-var _Login = __webpack_require__(567);
-
-var _Login2 = _interopRequireDefault(_Login);
-
-var _Signup = __webpack_require__(568);
-
-var _Signup2 = _interopRequireDefault(_Signup);
-
-var _Dashboard = __webpack_require__(407);
-
-var _Dashboard2 = _interopRequireDefault(_Dashboard);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ProtectedView = function ProtectedView() {
-  return _react2.default.createElement(
-    'div',
-    { className: 'app' },
-    _react2.default.createElement(_reactRouter.Match, {
-      pattern: '/',
-      component: _Dashboard2.default
-    }),
-    _react2.default.createElement(_reactRouter.Miss, { component: _Dashboard2.default
-    })
-  );
-};
-
-var UnProtectedView = function UnProtectedView() {
-  return _react2.default.createElement(
-    'div',
-    { className: 'app' },
-    _react2.default.createElement(
-      'ul',
-      null,
-      _react2.default.createElement(
-        'li',
-        null,
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: '/login' },
-          'Login'
-        )
-      ),
-      _react2.default.createElement(
-        'li',
-        null,
-        _react2.default.createElement(
-          _reactRouter.Link,
-          { to: '/signup' },
-          'Signup'
-        )
-      )
-    ),
-    _react2.default.createElement(_reactRouter.Match, {
-      exactly: true,
-      pattern: '/',
-      component: _Landing2.default
-    }),
-    _react2.default.createElement(_reactRouter.Match, {
-      pattern: '/signup',
-      component: _Signup2.default
-    }),
-    _react2.default.createElement(_reactRouter.Match, {
-      pattern: '/login',
-      component: _Login2.default
-    }),
-    _react2.default.createElement(_reactRouter.Miss, { component: _Landing2.default
-    })
-  );
-};
-
-var Main = function Main(_ref) {
-  var loggedIn = _ref.loggedIn;
-
-  return loggedIn ? _react2.default.createElement(ProtectedView, null) : _react2.default.createElement(UnProtectedView, null);
-};
-
-Main.defaultProps = {
-  loggedIn: false
-};
-
-Main.propTypes = {
-  loggedIn: _react2.default.PropTypes.bool
-};
-
-exports.default = Main;
-
-/***/ },
+/* 569 */,
 /* 570 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -38890,19 +38866,18 @@ var post = function post(url, body) {
   });
 };
 
-var signup = function signup(username, password, token) {
-  return post(getEndpoint('signin'), {
+var signup = function signup(emailAddress, username, password) {
+  return post(getEndpoint('signup'), {
+    emailAddress: emailAddress,
     username: username,
-    password: password,
-    token: token
+    password: password
   });
 };
 
-var login = function login(username, password, token) {
+var login = function login(username, password) {
   return post(getEndpoint('login'), {
     username: username,
-    password: password,
-    token: token
+    password: password
   });
 };
 
@@ -39429,7 +39404,81 @@ module.exports = self.fetch.bind(self);
 })(typeof self !== 'undefined' ? self : undefined);
 
 /***/ },
-/* 573 */
+/* 573 */,
+/* 574 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(9);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(520);
+
+var _App = __webpack_require__(575);
+
+var _App2 = _interopRequireDefault(_App);
+
+var _store = __webpack_require__(411);
+
+var _store2 = _interopRequireDefault(_store);
+
+var _app = __webpack_require__(404);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var store = (0, _store2.default)();
+
+var Root = function (_React$Component) {
+  _inherits(Root, _React$Component);
+
+  function Root(props) {
+    _classCallCheck(this, Root);
+
+    var _this = _possibleConstructorReturn(this, (Root.__proto__ || Object.getPrototypeOf(Root)).call(this, props));
+
+    if (_this.props.router) {
+      store.dispatch((0, _app.setRouter)(_this.props.router));
+    }
+    return _this;
+  }
+
+  _createClass(Root, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactRedux.Provider,
+        { store: store },
+        _react2.default.createElement(_App2.default, null)
+      );
+    }
+  }]);
+
+  return Root;
+}(_react2.default.Component);
+
+Root.propTypes = {
+  router: _react2.default.PropTypes.object
+};
+
+exports.default = Root;
+
+/***/ },
+/* 575 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39441,9 +39490,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _reactRedux = __webpack_require__(520);
 
-var _Main = __webpack_require__(569);
+var _App = __webpack_require__(220);
 
-var _Main2 = _interopRequireDefault(_Main);
+var _App2 = _interopRequireDefault(_App);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39454,7 +39503,7 @@ var select = function select(state) {
 };
 var actions = null;
 
-exports.default = (0, _reactRedux.connect)(select, actions)(_Main2.default);
+exports.default = (0, _reactRedux.connect)(select, actions)(_App2.default);
 
 /***/ }
 /******/ ]);

@@ -1,14 +1,11 @@
 import { connect } from 'react-redux';
 import App from '../components/App';
-import { setRouter } from '../actions/app';
 
-const select = null;
-const actions = (dispatch) => {
+const select = (state) => {
   return {
-    setRouter: (router) => {
-      dispatch(setRouter(router));
-    }
+    loggedIn: state.app.loggedIn
   };
 };
+const actions = null;
 
 export default connect(select, actions)(App);

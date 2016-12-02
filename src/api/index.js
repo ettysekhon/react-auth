@@ -82,19 +82,18 @@ const post = (url, body) => {
   });
 };
 
-const signup = (username, password, token) => {
-  return post(getEndpoint('signin'), {
+const signup = (emailAddress, username, password) => {
+  return post(getEndpoint('signup'), {
+    emailAddress,
     username,
-    password,
-    token
+    password
   });
 };
 
-const login = (username, password, token) => {
+const login = (username, password) => {
   return post(getEndpoint('login'), {
     username,
-    password,
-    token
+    password
   });
 };
 

@@ -25,5 +25,9 @@
 ## Future list (performance)
 ---
   1. Make it a PWA
+    * the app shell
+    * client side storage
+    * service workers
+    * installable web apps
   2. What state should be stored in local storage (menu links)
   3. Implement code splitting

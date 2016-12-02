@@ -1,13 +1,13 @@
 import 'babel-polyfill';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './components/App';
+import { render } from 'react-dom';
+import Root from './components/Root';
 import { BrowserRouter } from 'react-router';
 
-ReactDOM.render(
+render(
   <BrowserRouter>
     {({ router }) => (
-      <App router={router} />
+      <Root router={router} />
     )}
   </BrowserRouter>,
   document.getElementById('app')

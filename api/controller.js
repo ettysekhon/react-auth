@@ -4,8 +4,9 @@ const uuid = require('uuid');
 
 let users = [{
   id: uuid.v4(),
-  username: 'blackfriday',
-  password: 'eric'
+  emailAddress: 'eric@blackfriday.com',
+  username: 'eric',
+  password: 'blackfriday'
 }];
 
 const accounts = [{
@@ -35,9 +36,10 @@ const user = {
     const result = users.find(findUser(username, password));
     cb(null, result);
   },
-  signup (uid, username, password, cb) {
+  signup (emailAddress, username, password, cb) {
     const usr = {
-      id: uid,
+      id: uuid.v4(),
+      emailAddress,
       username,
       password
     };
@@ -85,10 +87,11 @@ exports.logout = (req, res, next) => {
 exports.signup = (req, res, next) => {
   const emailAddress = req.body.emailAddress;
   const username = req.body.username;
-  if (!emailAddress || !username) {
+  const password = req.body.password;
+  if (!emailAddress || !username || !password) {
     res.sendStatus(400);
   } else {
-    user.signup(username, emailAddress, (err, usr) => {
+    user.signup(emailAddress, username, password, (err, usr) => {
       if (err) {
         return next(new Error('invalid user credentials', err));
       }
