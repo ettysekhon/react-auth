@@ -1,5 +1,18 @@
 # react-auth
 
+## Do next
+1. set state into local storage
+2. get state from local storage
+3. update API to get token from local storage
+
+## This weekend
+1. PWA
+2. Server side rendering
+3. Elm
+4. Maths
+5. Adrian Spanish
+
+
 ## Routes
 ---
   * /

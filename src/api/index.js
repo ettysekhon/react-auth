@@ -1,11 +1,17 @@
 import fetch from 'isomorphic-fetch';
-
+import { loadState } from '../utils/localStorage';
 const getEndpoint = (path) => {
   const test = true;
   const host = test === true
     ? 'http://localhost:8080/api/'
     : 'http://eric.kicks-ass.org/web-api/';
   return `${host}${path}`;
+};
+
+const getToken = () => {
+  const persistedState = loadState();
+  const token = persistedState && persistedState.app && persistedState.app.token;
+  return `Bearer ${token}`;
 };
 
 const status = (response) => {
@@ -40,7 +46,8 @@ const get = (url) => {
       credentials: 'include',
       headers: {
         Accept: 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': getToken()
       }
     })
     .then(status)
@@ -66,7 +73,8 @@ const post = (url, body) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': getToken()
       },
       body: JSON.stringify(body)
     })
@@ -97,40 +105,28 @@ const login = (username, password) => {
   });
 };
 
-const getAccounts = (token) => {
-  return post(getEndpoint('accounts'), {
-    token
-  });
+const getAccounts = () => {
+  return post(getEndpoint('accounts'));
 };
 
-const getAccount = (id, token) => {
-  return get(getEndpoint(`accounts/${id}`), {
-    token
-  });
+const getAccount = (id) => {
+  return get(getEndpoint(`accounts/${id}`));
 };
 
-const getLogs = (id, token) => {
-  return get(getEndpoint(`accounts/${id}`), {
-    token
-  });
+const getLogs = (id) => {
+  return get(getEndpoint(`accounts/${id}`));
 };
 
-const updateAccount = (id, token) => {
-  return get(getEndpoint(`accounts/${id}`), {
-    token
-  });
+const updateAccount = (id) => {
+  return get(getEndpoint(`accounts/${id}`));
 };
 
-const deleteAccount = (id, token) => {
-  return get(getEndpoint(`accounts/${id}`), {
-    token
-  });
+const deleteAccount = (id) => {
+  return get(getEndpoint(`accounts/${id}`));
 };
 
-const logout = (id, token) => {
-  return get(getEndpoint(`accounts/${id}`), {
-    token
-  });
+const logout = (id) => {
+  return get(getEndpoint(`accounts/${id}`));
 };
 
 export default {

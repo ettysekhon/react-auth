@@ -44,8 +44,8 @@ const UnProtectedView = () => {
   );
 };
 
-const App = ({ loggedIn }) => {
-  return loggedIn ? (
+const App = (props) => {
+  return props.loggedIn ? (
     <ProtectedView />
   ) : (
     <UnProtectedView />

@@ -1,16 +1,8 @@
 import ActionTypes from '../actions/types';
 import objectAssign from 'object-assign';
+import defaultState from './defaultState';
 
-const app = (state = {
-  error: null,
-  isFetching: false,
-  loggedIn: false,
-  nextPathName: '/',
-  token: '',
-  user: {},
-  router: null,
-  redirectToReferrer: false
-}, action) => {
+const app = (state = defaultState.app, action) => {
   switch (action.type) {
   case ActionTypes.LOGIN_REQUEST:
     return objectAssign({}, state, {

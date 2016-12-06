@@ -5,7 +5,9 @@ const logger = require('./logger');
 /* eslint-disable consistent-return */
 exports.verifyCredentials = (errorIfNoToken) => {
   return (req, res, next) => {
-    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    const authorizationHeader = req.headers['Authorization'] || '';
+    const token = authorizationHeader.length > 0 ? authorizationHeader.split('Bearer ')[1] : null;
+    console.log('token', token);
     // token is set on login routes
     // and cleared on logout, on expiry user will need to login again
     if (token) {

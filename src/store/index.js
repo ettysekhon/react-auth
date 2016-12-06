@@ -1,16 +1,23 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
+import throttle from 'lodash/throttle';
 import rootReducer from '../reducers';
+import { loadState, saveState } from '../utils/localStorage';
 
 export const configureStore = preloadedState => {
+  const persistedState = loadState();
   const store = createStore(
     rootReducer,
-    preloadedState,
+    { ...preloadedState, ...persistedState },
     compose(
       applyMiddleware(thunk, createLogger())
     )
   );
+
+  store.subscribe(throttle(() => {
+    saveState(store.getState());
+  }, 100));
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
