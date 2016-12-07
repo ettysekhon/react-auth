@@ -6,9 +6,7 @@ const logger = require('./logger');
 exports.verifyCredentials = (errorIfNoToken) => {
   return (req, res, next) => {
     const authorizationHeader = req.headers['Authorization'] || req.headers['authorization'] || '';
-    console.log('authorizationHeader', authorizationHeader);
     const token = authorizationHeader.length > 0 ? authorizationHeader.split('Bearer ')[1] : null;
-    console.log('token', token);
     // token is set on login routes
     // and cleared on logout, on expiry user will need to login again
     if (token) {
