@@ -1,5 +1,6 @@
 module.exports = {
   app: {
+    accounts: [],
     error: null,
     isFetching: false,
     loggedIn: false,

@@ -8016,6 +8016,10 @@ addToUnscopables('entries');
 module.exports = {
   // ASYNC.
   // -------------------------------------------------------------------------->
+  ACCOUNT_REQUEST: 'ACCOUNT_REQUEST',
+  ACCOUNT_SUCCESS: 'ACCOUNT_SUCCESS',
+  ACCOUNT_FAILURE: 'ACCOUNT_FAILURE',
+  // -------------------------------------------------------------------------->
   LOGIN_REQUEST: 'LOGIN_REQUEST',
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_FAILURE: 'LOGIN_FAILURE',
@@ -8027,6 +8031,10 @@ module.exports = {
   SIGNUP_REQUEST: 'SIGNUP_REQUEST',
   SIGNUP_SUCCESS: 'SIGNUP_SUCCESS',
   SIGNUP_FAILURE: 'SIGNUP_FAILURE',
+  // -------------------------------------------------------------------------->
+  REGISTER_INTEREST_REQUEST: 'REGISTER_INTEREST_REQUEST',
+  REGISTER_INTEREST_SUCCESS: 'REGISTER_INTEREST_SUCCESS',
+  REGISTER_INTEREST_FAILURE: 'REGISTER_INTEREST_FAILURE',
   // -------------------------------------------------------------------------->
   // SYNC.
   // -------------------------------------------------------------------------->
@@ -11338,9 +11346,9 @@ var signupRequest = (0, _createAction2.default)(_types2.default.SIGNUP_REQUEST);
 var signupSuccess = (0, _createAction2.default)(_types2.default.SIGNUP_SUCCESS);
 var signupFailure = (0, _createAction2.default)(_types2.default.SIGNUP_FAILURE);
 
-var logoutRequest = (0, _createAction2.default)(_types2.default.LOGOUT_REQUEST);
-var logoutSuccess = (0, _createAction2.default)(_types2.default.LOGOUT_SUCCESS);
-var logoutFailure = (0, _createAction2.default)(_types2.default.LOGOUT_FAILURE);
+// const logoutRequest = createAction(ActionTypes.LOGOUT_REQUEST);
+// const logoutSuccess = createAction(ActionTypes.LOGOUT_SUCCESS);
+// const logoutFailure = createAction(ActionTypes.LOGOUT_FAILURE);
 
 var saveToken = function saveToken(token) {
   var state = (0, _localStorage.loadState)();
@@ -20096,13 +20104,29 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.setRouter = undefined;
+exports.registerInterest = exports.getAccounts = exports.setRouter = undefined;
 
 var _types = __webpack_require__(127);
 
 var _types2 = _interopRequireDefault(_types);
 
+var _createAction = __webpack_require__(409);
+
+var _createAction2 = _interopRequireDefault(_createAction);
+
+var _api = __webpack_require__(410);
+
+var _api2 = _interopRequireDefault(_api);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var accountRequest = (0, _createAction2.default)(_types2.default.ACCOUNT_REQUEST);
+var accountSuccess = (0, _createAction2.default)(_types2.default.ACCOUNT_SUCCESS);
+var accountFailure = (0, _createAction2.default)(_types2.default.ACCOUNT_FAILURE);
+
+var registerInterestRequest = (0, _createAction2.default)(_types2.default.REGISTER_INTEREST_REQUEST);
+var registerInterestSuccess = (0, _createAction2.default)(_types2.default.REGISTER_INTEREST_SUCCESS);
+var registerInterestFailure = (0, _createAction2.default)(_types2.default.REGISTER_INTEREST_FAILURE);
 
 var setRouter = exports.setRouter = function setRouter(router) {
   return {
@@ -20113,22 +20137,30 @@ var setRouter = exports.setRouter = function setRouter(router) {
   };
 };
 
-// export const registerInterest = (firstName, lastName, company, emailAddress) => {
-//   return (dispatch, getState) => {
-//     dispatch(signupRequest());
-//     API.signup(emailAddress, username, password)
-//     .then((payload) => {
-//       dispatch(signupSuccess({
-//         isLoggedIn: true,
-//         user: payload.user,
-//         token: payload.token
-//       }));
-//       nextRoute(getState, '/');
-//     }).catch((err) => {
-//       dispatch(signupFailure(null, err));
-//     });
-//   };
-// };
+var getAccounts = exports.getAccounts = function getAccounts(username, password) {
+  return function (dispatch, getState) {
+    dispatch(accountRequest());
+    _api2.default.getAccounts(username, password).then(function (payload) {
+      dispatch(accountSuccess({
+        accounts: payload.accounts
+      }));
+    }).catch(function (err) {
+      // if error was a 403 then redirect ?
+      dispatch(accountFailure(null, err));
+    });
+  };
+};
+
+var registerInterest = exports.registerInterest = function registerInterest(emailAddress, mobile) {
+  return function (dispatch, getState) {
+    dispatch(registerInterestRequest());
+    _api2.default.registerInterest(emailAddress, mobile).then(function (payload) {
+      dispatch(registerInterestSuccess());
+    }).catch(function (err) {
+      dispatch(registerInterestFailure(null, err));
+    });
+  };
+};
 
 /***/ },
 /* 409 */
@@ -20176,10 +20208,17 @@ var getEndpoint = function getEndpoint(path) {
   return '' + host + path;
 };
 
-var getToken = function getToken() {
+var getHeaders = function getHeaders() {
   var persistedState = (0, _localStorage.loadState)();
   var token = persistedState && persistedState.app && persistedState.app.token;
-  return 'Bearer ' + token;
+  var headers = new Headers({
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Authorization': 'Bearer ' + token
+  });
+  console.log('headers', headers);
+  return headers;
 };
 
 var status = function status(response) {
@@ -20210,11 +20249,7 @@ var get = function get(url) {
     (0, _isomorphicFetch2.default)(url, {
       mode: 'cors',
       credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': getToken()
-      }
+      headers: getHeaders()
     }).then(status).then(getJson).then(getPayload).then(function (payload) {
       resolve(payload);
     }).catch(function (err) {
@@ -20231,12 +20266,7 @@ var post = function post(url, body) {
       method: 'POST',
       mode: 'cors',
       credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': getToken()
-      },
+      headers: getHeaders(),
       body: JSON.stringify(body)
     }).then(status).then(getJson).then(getPayload).then(function (payload) {
       resolve(payload);
@@ -20262,7 +20292,7 @@ var login = function login(username, password) {
 };
 
 var getAccounts = function getAccounts() {
-  return post(getEndpoint('accounts'));
+  return get(getEndpoint('accounts'));
 };
 
 var getAccount = function getAccount(id) {
@@ -20367,6 +20397,11 @@ var Accounts = function (_React$Component) {
   }
 
   _createClass(Accounts, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.getAccounts();
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -20385,11 +20420,12 @@ var Accounts = function (_React$Component) {
 }(_react2.default.Component);
 
 Accounts.propTypes = {
-  isLoggedIn: _react2.default.PropTypes.bool
+  getAccounts: _react2.default.PropTypes.func.isRequired,
+  accounts: _react2.default.PropTypes.array.isRequired
 };
 
 Accounts.defaultProps = {
-  isLoggedIn: true
+  accounts: []
 };
 
 exports.default = Accounts;
@@ -20517,7 +20553,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = __webpack_require__(100);
 
-var _Accounts = __webpack_require__(412);
+var _Accounts = __webpack_require__(584);
 
 var _Accounts2 = _interopRequireDefault(_Accounts);
 
@@ -21096,6 +21132,7 @@ exports.default = app;
 
 module.exports = {
   app: {
+    accounts: [],
     error: null,
     isFetching: false,
     loggedIn: false,
@@ -40065,6 +40102,42 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     return _react2.default.createElement(_Root2.default, { router: router });
   }
 ), document.getElementById('app'));
+
+/***/ },
+/* 584 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Accounts = __webpack_require__(412);
+
+var _Accounts2 = _interopRequireDefault(_Accounts);
+
+var _app = __webpack_require__(408);
+
+var _reactRedux = __webpack_require__(97);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var select = function select(state) {
+  return {
+    accounts: state.app.accounts
+  };
+};
+var actions = function actions(dispatch) {
+  return {
+    getAccounts: function getAccounts() {
+      dispatch((0, _app.getAccounts)());
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(select, actions)(_Accounts2.default);
 
 /***/ }
 /******/ ]);

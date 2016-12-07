@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import { loadState } from '../utils/localStorage';
+
 const getEndpoint = (path) => {
   const test = true;
   const host = test === true
@@ -8,10 +9,17 @@ const getEndpoint = (path) => {
   return `${host}${path}`;
 };
 
-const getToken = () => {
+const getHeaders = () => {
   const persistedState = loadState();
   const token = persistedState && persistedState.app && persistedState.app.token;
-  return `Bearer ${token}`;
+  const headers = new Headers({
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
+    'Authorization': `Bearer ${token}`
+  });
+  console.log('headers', headers);
+  return headers;
 };
 
 const status = (response) => {
@@ -44,11 +52,7 @@ const get = (url) => {
     fetch(url, {
       mode: 'cors',
       credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': getToken()
-      }
+      headers: getHeaders()
     })
     .then(status)
     .then(getJson)
@@ -70,12 +74,7 @@ const post = (url, body) => {
       method: 'POST',
       mode: 'cors',
       credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'Authorization': getToken()
-      },
+      headers: getHeaders(),
       body: JSON.stringify(body)
     })
     .then(status)
@@ -106,7 +105,7 @@ const login = (username, password) => {
 };
 
 const getAccounts = () => {
-  return post(getEndpoint('accounts'));
+  return get(getEndpoint('accounts'));
 };
 
 const getAccount = (id) => {

@@ -5,7 +5,8 @@ const logger = require('./logger');
 /* eslint-disable consistent-return */
 exports.verifyCredentials = (errorIfNoToken) => {
   return (req, res, next) => {
-    const authorizationHeader = req.headers['Authorization'] || '';
+    const authorizationHeader = req.headers['Authorization'] || req.headers['authorization'] || '';
+    console.log('authorizationHeader', authorizationHeader);
     const token = authorizationHeader.length > 0 ? authorizationHeader.split('Bearer ')[1] : null;
     console.log('token', token);
     // token is set on login routes

@@ -10,6 +10,7 @@
     "semi": ["error", "always"]
   },
   "globals": {
-    "localStorage": true
+    "localStorage": true,
+    "Headers": true
   }
 }

@@ -7,6 +7,9 @@ class Accounts extends React.Component {
       redirectToReferrer: false
     };
   }
+  componentDidMount () {
+    this.props.getAccounts();
+  }
   render () {
     return (
       <div>
@@ -17,11 +20,12 @@ class Accounts extends React.Component {
 }
 
 Accounts.propTypes = {
-  isLoggedIn: React.PropTypes.bool
+  getAccounts: React.PropTypes.func.isRequired,
+  accounts: React.PropTypes.array.isRequired,
 };
 
 Accounts.defaultProps = {
-  isLoggedIn: true
+  accounts: []
 };
 
 export default Accounts;
