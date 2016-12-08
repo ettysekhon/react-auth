@@ -1,7 +1,7 @@
 import React from 'react';
 import { Match, Miss, Link } from 'react-router';
 import Accounts from '../containers/Accounts';
-import AccessLogs from './AccessLogs';
+import AccessLogs from '../containers/AccessLogs';
 
 const Dashboard = ({ pathname }) => (
   <div>

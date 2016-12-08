@@ -10,10 +10,18 @@ class Accounts extends React.Component {
   componentDidMount () {
     this.props.getAccounts();
   }
+  renderAccount (account) {
+    return (
+      <li>{account.id}</li>
+    );
+  }
   render () {
     return (
       <div>
         <h2>Accounts</h2>
+        <ul>
+          { this.props.accounts.map((account) => this.renderAccount(account)) }
+        </ul>
       </div>
     );
   }

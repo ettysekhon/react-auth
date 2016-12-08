@@ -24,6 +24,40 @@ const app = (state = defaultState.app, action) => {
       token: '',
       user: {},
     });
+  case ActionTypes.ACCOUNT_REQUEST:
+    return objectAssign({}, state, {
+      error: null,
+      isFetching: true
+    });
+  case ActionTypes.ACCOUNT_SUCCESS:
+    return objectAssign({}, state, {
+      accounts: action.payload.accounts,
+      error: true,
+      isFetching: false
+    });
+  case ActionTypes.ACCOUNT_FAILURE:
+    return objectAssign({}, state, {
+      accounts: [],
+      error: true,
+      isFetching: false
+    });
+  case ActionTypes.LOGS_REQUEST:
+    return objectAssign({}, state, {
+      error: null,
+      isFetching: true
+    });
+  case ActionTypes.LOGS_SUCCESS:
+    return objectAssign({}, state, {
+      logs: action.payload.logs,
+      error: true,
+      isFetching: false
+    });
+  case ActionTypes.LOGS_FAILURE:
+    return objectAssign({}, state, {
+      logs: [],
+      error: true,
+      isFetching: false
+    });
   case ActionTypes.NEXT_PATH_NAME:
     return objectAssign({}, state, {
       nextPathName: action.payload.nextPathName || '/'

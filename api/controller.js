@@ -143,5 +143,21 @@ exports.deleteAccount = (req, res, next) => {
 };
 
 exports.getLogs = (req, res, next) => {
-  res.sendStatus(200);
+  return res.json({
+    payload: {
+      logs: [{
+        id: '10126442',
+        user: 'abc'
+      }, {
+        id: '18877428',
+        user: 'def'
+      }, {
+        id: '10137727',
+        user: 'ghi'
+      }, {
+        id: '10133883',
+        user: 'jkl'
+      }]
+    }
+  });
 };

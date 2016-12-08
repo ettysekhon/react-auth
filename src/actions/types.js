@@ -5,6 +5,10 @@ module.exports = {
   ACCOUNT_SUCCESS: 'ACCOUNT_SUCCESS',
   ACCOUNT_FAILURE: 'ACCOUNT_FAILURE',
   // -------------------------------------------------------------------------->
+  LOGS_REQUEST: 'LOGS_REQUEST',
+  LOGS_SUCCESS: 'LOGS_SUCCESS',
+  LOGS_FAILURE: 'LOGS_FAILURE',
+  // -------------------------------------------------------------------------->
   LOGIN_REQUEST: 'LOGIN_REQUEST',
   LOGIN_SUCCESS: 'LOGIN_SUCCESS',
   LOGIN_FAILURE: 'LOGIN_FAILURE',

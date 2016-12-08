@@ -6,6 +6,10 @@ const accountRequest = createAction(ActionTypes.ACCOUNT_REQUEST);
 const accountSuccess = createAction(ActionTypes.ACCOUNT_SUCCESS);
 const accountFailure = createAction(ActionTypes.ACCOUNT_FAILURE);
 
+const logsRequest = createAction(ActionTypes.LOGS_REQUEST);
+const logsSuccess = createAction(ActionTypes.LOGS_SUCCESS);
+const logsFailure = createAction(ActionTypes.LOGS_FAILURE);
+
 const registerInterestRequest = createAction(ActionTypes.REGISTER_INTEREST_REQUEST);
 const registerInterestSuccess = createAction(ActionTypes.REGISTER_INTEREST_SUCCESS);
 const registerInterestFailure = createAction(ActionTypes.REGISTER_INTEREST_FAILURE);
@@ -30,6 +34,21 @@ export const getAccounts = (username, password) => {
     }).catch((err) => {
       // if error was a 403 then redirect ?
       dispatch(accountFailure(null, err));
+    });
+  };
+};
+
+export const getLogs = () => {
+  return (dispatch, getState) => {
+    dispatch(logsRequest());
+    API.getLogs()
+    .then((payload) => {
+      dispatch(logsSuccess({
+        logs: payload.logs
+      }));
+    }).catch((err) => {
+      // if error was a 403 then redirect ?
+      dispatch(logsFailure(null, err));
     });
   };
 };

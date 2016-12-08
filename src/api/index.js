@@ -113,7 +113,7 @@ const getAccount = (id) => {
 };
 
 const getLogs = (id) => {
-  return get(getEndpoint(`accounts/${id}`));
+  return get(getEndpoint(`logs`));
 };
 
 const updateAccount = (id) => {

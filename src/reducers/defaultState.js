@@ -3,6 +3,7 @@ module.exports = {
     accounts: [],
     error: null,
     isFetching: false,
+    logs: [],
     loggedIn: false,
     nextPathName: '/',
     token: '',
