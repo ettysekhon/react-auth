@@ -4,6 +4,7 @@ import defaultState from './defaultState';
 
 const app = (state = defaultState.app, action) => {
   switch (action.type) {
+  case ActionTypes.LOGOUT_REQUEST:
   case ActionTypes.LOGIN_REQUEST:
     return objectAssign({}, state, {
       error: null,
@@ -16,6 +17,8 @@ const app = (state = defaultState.app, action) => {
       token: action.payload.token,
       user: action.payload.user,
     });
+  case ActionTypes.LOGOUT_SUCCESS:
+  case ActionTypes.LOGOUT_FAILURE:
   case ActionTypes.LOGIN_FAILURE:
     return objectAssign({}, state, {
       error: true,

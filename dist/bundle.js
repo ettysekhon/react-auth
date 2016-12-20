@@ -11442,7 +11442,7 @@ if (new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.signup = exports.login = undefined;
+exports.signup = exports.logout = exports.login = undefined;
 
 var _types = __webpack_require__(128);
 
@@ -11468,9 +11468,9 @@ var signupRequest = (0, _createAction2.default)(_types2.default.SIGNUP_REQUEST);
 var signupSuccess = (0, _createAction2.default)(_types2.default.SIGNUP_SUCCESS);
 var signupFailure = (0, _createAction2.default)(_types2.default.SIGNUP_FAILURE);
 
-// const logoutRequest = createAction(ActionTypes.LOGOUT_REQUEST);
-// const logoutSuccess = createAction(ActionTypes.LOGOUT_SUCCESS);
-// const logoutFailure = createAction(ActionTypes.LOGOUT_FAILURE);
+var logoutRequest = (0, _createAction2.default)(_types2.default.LOGOUT_REQUEST);
+var logoutSuccess = (0, _createAction2.default)(_types2.default.LOGOUT_SUCCESS);
+var logoutFailure = (0, _createAction2.default)(_types2.default.LOGOUT_FAILURE);
 
 var saveToken = function saveToken(token) {
   var state = (0, _localStorage.loadState)();
@@ -11504,6 +11504,21 @@ var login = exports.login = function login(username, password) {
       nextRoute(getState, '/');
     }).catch(function (err) {
       dispatch(loginFailure(null, err));
+    });
+  };
+};
+
+var logout = exports.logout = function logout() {
+  return function (dispatch, getState) {
+    dispatch(logoutRequest({}));
+    _api2.default.logout().then(function () {
+      saveToken('');
+      dispatch(logoutSuccess({}));
+      nextRoute(getState, '/');
+    }).catch(function (err) {
+      saveToken('');
+      dispatch(logoutFailure(null, err));
+      nextRoute(getState, '/');
     });
   };
 };
@@ -11675,7 +11690,7 @@ var deleteAccount = function deleteAccount(id) {
 };
 
 var logout = function logout(id) {
-  return get(getEndpoint('accounts/' + id));
+  return post(getEndpoint('logout'));
 };
 
 exports.default = {
@@ -20517,10 +20532,10 @@ var Accounts = function (_React$Component) {
     }
   }, {
     key: 'renderAccount',
-    value: function renderAccount(account) {
+    value: function renderAccount(account, index) {
       return _react2.default.createElement(
         'li',
-        null,
+        { key: index },
         account.id
       );
     }
@@ -20540,8 +20555,8 @@ var Accounts = function (_React$Component) {
         _react2.default.createElement(
           'ul',
           null,
-          this.props.accounts.map(function (account) {
-            return _this2.renderAccount(account);
+          this.props.accounts.map(function (account, index) {
+            return _this2.renderAccount(account, index);
           })
         )
       );
@@ -20597,6 +20612,10 @@ var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var UnknownView = function UnknownView() {
+  return null;
+};
+
 var ProtectedView = function ProtectedView() {
   return _react2.default.createElement(
     'div',
@@ -20649,7 +20668,7 @@ var UnProtectedView = function UnProtectedView() {
       pattern: '/login',
       component: _Login2.default
     }),
-    _react2.default.createElement(_reactRouter.Miss, { component: _Landing2.default
+    _react2.default.createElement(_reactRouter.Miss, { component: UnknownView
     })
   );
 };
@@ -20685,6 +20704,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouter = __webpack_require__(100);
 
+var _Logout = __webpack_require__(586);
+
+var _Logout2 = _interopRequireDefault(_Logout);
+
 var _Accounts = __webpack_require__(420);
 
 var _Accounts2 = _interopRequireDefault(_Accounts);
@@ -20713,6 +20736,15 @@ var Dashboard = function Dashboard(_ref) {
         null,
         _react2.default.createElement(
           _reactRouter.Link,
+          { to: '/logout' },
+          'Logout'
+        )
+      ),
+      _react2.default.createElement(
+        'li',
+        null,
+        _react2.default.createElement(
+          _reactRouter.Link,
           { to: '/access-logs' },
           'Access Logs'
         )
@@ -20727,6 +20759,10 @@ var Dashboard = function Dashboard(_ref) {
         )
       )
     ),
+    _react2.default.createElement(_reactRouter.Match, {
+      pattern: '/logout',
+      component: _Logout2.default
+    }),
     _react2.default.createElement(_reactRouter.Match, {
       component: _AccessLogs2.default,
       pattern: '/access-logs'
@@ -20900,55 +20936,6 @@ Login.propTypes = {
 };
 
 exports.default = Login;
-
-// <li><Link to='/dashboard'>Dashboard</Link></li>
-//
-// <Match
-//   pattern='/dashboard'
-//   component={Dashboard}
-// />
-
-// export default Login;
-
-// import React from 'react';
-// import { Redirect } from 'react-router';
-//
-// class Login extends React.Component {
-//   constructor () {
-//     super();
-//     this.state = {
-//       redirectToReferrer: false
-//     };
-//   }
-//   login () {
-//     fakeAuth.authenticate(() => {
-//       this.setState({ redirectToReferrer: true });
-//     });
-//   }
-//
-//   render () {
-//     const { from } = this.props.location.state || '/';
-//     const { redirectToReferrer } = this.state;
-//
-//     return (
-//       <div>
-//         {redirectToReferrer && (
-//           <Redirect to={from || '/'}
-//           />
-//         )}
-//         {from && (
-//           <p>
-//             You must log in to view the page at
-//             <code>{from.pathname}</code>
-//           </p>
-//         )}
-//         <button onClick={this.login}>Log in</button>
-//       </div>
-//     );
-//   }
-// };
-//
-// export default Login;
 
 /***/ },
 /* 418 */
@@ -21292,6 +21279,7 @@ var app = function app() {
   var action = arguments[1];
 
   switch (action.type) {
+    case _types2.default.LOGOUT_REQUEST:
     case _types2.default.LOGIN_REQUEST:
       return (0, _objectAssign2.default)({}, state, {
         error: null,
@@ -21304,6 +21292,8 @@ var app = function app() {
         token: action.payload.token,
         user: action.payload.user
       });
+    case _types2.default.LOGOUT_SUCCESS:
+    case _types2.default.LOGOUT_FAILURE:
     case _types2.default.LOGIN_FAILURE:
       return (0, _objectAssign2.default)({}, state, {
         error: true,
@@ -40309,6 +40299,103 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     return _react2.default.createElement(_Root2.default, { router: router });
   }
 ), document.getElementById('app'));
+
+/***/ },
+/* 586 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Logout = __webpack_require__(587);
+
+var _Logout2 = _interopRequireDefault(_Logout);
+
+var _auth = __webpack_require__(183);
+
+var _reactRedux = __webpack_require__(66);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var select = function select(state) {
+  return {
+    error: !!state.app.error
+  };
+};
+var actions = function actions(dispatch) {
+  return {
+    logout: function logout() {
+      dispatch((0, _auth.logout)());
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(select, actions)(_Logout2.default);
+
+/***/ },
+/* 587 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(8);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Logout = function (_Component) {
+  _inherits(Logout, _Component);
+
+  function Logout() {
+    _classCallCheck(this, Logout);
+
+    return _possibleConstructorReturn(this, (Logout.__proto__ || Object.getPrototypeOf(Logout)).apply(this, arguments));
+  }
+
+  _createClass(Logout, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.props.logout();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'p',
+        null,
+        'You are now logged out'
+      );
+    }
+  }]);
+
+  return Logout;
+}(_react.Component);
+
+Logout.displayName = 'Logout';
+
+Logout.propTypes = {
+  logout: _react.PropTypes.func.isRequired
+};
+
+exports.default = Logout;
 
 /***/ }
 /******/ ]);

@@ -10,9 +10,9 @@ class Accounts extends React.Component {
   componentDidMount () {
     this.props.getAccounts();
   }
-  renderAccount (account) {
+  renderAccount (account, index) {
     return (
-      <li>{account.id}</li>
+      <li key={index}>{account.id}</li>
     );
   }
   render () {
@@ -20,7 +20,7 @@ class Accounts extends React.Component {
       <div>
         <h2>Accounts</h2>
         <ul>
-          { this.props.accounts.map((account) => this.renderAccount(account)) }
+          { this.props.accounts.map((account, index) => this.renderAccount(account, index)) }
         </ul>
       </div>
     );

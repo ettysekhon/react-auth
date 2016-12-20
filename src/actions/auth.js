@@ -11,9 +11,9 @@ const signupRequest = createAction(ActionTypes.SIGNUP_REQUEST);
 const signupSuccess = createAction(ActionTypes.SIGNUP_SUCCESS);
 const signupFailure = createAction(ActionTypes.SIGNUP_FAILURE);
 
-// const logoutRequest = createAction(ActionTypes.LOGOUT_REQUEST);
-// const logoutSuccess = createAction(ActionTypes.LOGOUT_SUCCESS);
-// const logoutFailure = createAction(ActionTypes.LOGOUT_FAILURE);
+const logoutRequest = createAction(ActionTypes.LOGOUT_REQUEST);
+const logoutSuccess = createAction(ActionTypes.LOGOUT_SUCCESS);
+const logoutFailure = createAction(ActionTypes.LOGOUT_FAILURE);
 
 const saveToken = (token) => {
   const state = loadState();
@@ -46,6 +46,22 @@ export const login = (username, password) => {
       nextRoute(getState, '/');
     }).catch((err) => {
       dispatch(loginFailure(null, err));
+    });
+  };
+};
+
+export const logout = () => {
+  return (dispatch, getState) => {
+    dispatch(logoutRequest({}));
+    API.logout()
+    .then(() => {
+      saveToken('');
+      dispatch(logoutSuccess({}));
+      nextRoute(getState, '/');
+    }).catch((err) => {
+      saveToken('');
+      dispatch(logoutFailure(null, err));
+      nextRoute(getState, '/');
     });
   };
 };

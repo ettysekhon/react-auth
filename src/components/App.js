@@ -5,6 +5,12 @@ import Login from '../containers/Login';
 import Signup from '../containers/Signup';
 import Dashboard from './Dashboard';
 
+const UnknownView = () => {
+  return (
+    null
+  );
+};
+
 const ProtectedView = () => {
   return (
     <div className='app'>
@@ -38,7 +44,7 @@ const UnProtectedView = () => {
         pattern='/login'
         component={Login}
       />
-      <Miss component={Landing}
+      <Miss component={UnknownView}
       />
     </div>
   );

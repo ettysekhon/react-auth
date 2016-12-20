@@ -1,5 +1,5 @@
-import Logout from '../../../components/auth/Logout';
-import { logout } from '../../../actions/auth';
+import Logout from '../components/Logout';
+import { logout } from '../actions/auth';
 import { connect } from 'react-redux';
 
 const select = (state) => {

@@ -125,7 +125,7 @@ const deleteAccount = (id) => {
 };
 
 const logout = (id) => {
-  return get(getEndpoint(`accounts/${id}`));
+  return post(getEndpoint(`logout`));
 };
 
 export default {
