@@ -36,3 +36,15 @@
     * installable web apps
   2. What state should be stored in local storage (menu links)
   3. Implement code splitting
+
+## Next Things
+* Do your own internet startup
+* Put it on GitHub as a public repository so others will see it
+* Do the whole cycle from backend database and maybe some NoSQL and a simple front-end
+* Add checkout with credit card processing.
+* Here’s a bad idea for a startup: Virtual Lemonade
+* Create a site where someone can use their phone’s current location to see what lemonade stands are available
+* What means you’ll need Global Information System (GIS) enablement and a database of stands
+* You’ll need server-side code and then client-side. And then, you’ll need to provide the ability for kids to register their stand with your service
+* Maybe give them notifications of a traveller looking for a stand so they can say they are open
+* You may not become the next Zuckerberg, but you certainly will pick up a full gamut of marketable skills.

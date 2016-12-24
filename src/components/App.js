@@ -18,7 +18,7 @@ const ProtectedView = () => {
         pattern='/'
         component={Dashboard}
       />
-      <Miss component={Dashboard}
+      <Miss component={UnknownView}
       />
     </div>
   );

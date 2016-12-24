@@ -8016,7 +8016,7 @@ addToUnscopables('entries');
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.registerInterest = exports.getLogs = exports.getAccounts = exports.setRouter = undefined;
+exports.registerInterest = exports.getLogs = exports.getAccount = exports.getAccounts = exports.setRouter = undefined;
 
 var _types = __webpack_require__(128);
 
@@ -8036,6 +8036,10 @@ var accountRequest = (0, _createAction2.default)(_types2.default.ACCOUNT_REQUEST
 var accountSuccess = (0, _createAction2.default)(_types2.default.ACCOUNT_SUCCESS);
 var accountFailure = (0, _createAction2.default)(_types2.default.ACCOUNT_FAILURE);
 
+var accountsRequest = (0, _createAction2.default)(_types2.default.ACCOUNTS_REQUEST);
+var accountsSuccess = (0, _createAction2.default)(_types2.default.ACCOUNTS_SUCCESS);
+var accountsFailure = (0, _createAction2.default)(_types2.default.ACCOUNTS_FAILURE);
+
 var logsRequest = (0, _createAction2.default)(_types2.default.LOGS_REQUEST);
 var logsSuccess = (0, _createAction2.default)(_types2.default.LOGS_SUCCESS);
 var logsFailure = (0, _createAction2.default)(_types2.default.LOGS_FAILURE);
@@ -8053,12 +8057,26 @@ var setRouter = exports.setRouter = function setRouter(router) {
   };
 };
 
-var getAccounts = exports.getAccounts = function getAccounts(username, password) {
+var getAccounts = exports.getAccounts = function getAccounts() {
+  return function (dispatch, getState) {
+    dispatch(accountsRequest());
+    _api2.default.getAccounts().then(function (payload) {
+      dispatch(accountsSuccess({
+        accounts: payload.accounts
+      }));
+    }).catch(function (err) {
+      // if error was a 403 then redirect ?
+      dispatch(accountsFailure(null, err));
+    });
+  };
+};
+
+var getAccount = exports.getAccount = function getAccount(accountId) {
   return function (dispatch, getState) {
     dispatch(accountRequest());
-    _api2.default.getAccounts(username, password).then(function (payload) {
+    _api2.default.getAccount(accountId).then(function (payload) {
       dispatch(accountSuccess({
-        accounts: payload.accounts
+        account: payload.account
       }));
     }).catch(function (err) {
       // if error was a 403 then redirect ?
@@ -8105,6 +8123,10 @@ module.exports = {
   ACCOUNT_REQUEST: 'ACCOUNT_REQUEST',
   ACCOUNT_SUCCESS: 'ACCOUNT_SUCCESS',
   ACCOUNT_FAILURE: 'ACCOUNT_FAILURE',
+  // -------------------------------------------------------------------------->
+  ACCOUNTS_REQUEST: 'ACCOUNTS_REQUEST',
+  ACCOUNTS_SUCCESS: 'ACCOUNTS_SUCCESS',
+  ACCOUNTS_FAILURE: 'ACCOUNTS_FAILURE',
   // -------------------------------------------------------------------------->
   LOGS_REQUEST: 'LOGS_REQUEST',
   LOGS_SUCCESS: 'LOGS_SUCCESS',
@@ -11488,13 +11510,13 @@ var nextRoute = function nextRoute(getState, path) {
   }
 };
 
-var login = exports.login = function login(username, password) {
+var login = exports.login = function login(emailAddress, password) {
   return function (dispatch, getState) {
     dispatch(loginRequest({
-      username: username,
+      emailAddress: emailAddress,
       password: password
     }));
-    _api2.default.login(username, password).then(function (payload) {
+    _api2.default.login(emailAddress, password).then(function (payload) {
       saveToken(payload.token);
       dispatch(loginSuccess({
         isLoggedIn: true,
@@ -11512,21 +11534,20 @@ var logout = exports.logout = function logout() {
   return function (dispatch, getState) {
     dispatch(logoutRequest({}));
     _api2.default.logout().then(function () {
-      saveToken('');
       dispatch(logoutSuccess({}));
-      nextRoute(getState, '/');
     }).catch(function (err) {
-      saveToken('');
       dispatch(logoutFailure(null, err));
+    }).then(function () {
+      saveToken('');
       nextRoute(getState, '/');
     });
   };
 };
 
-var signup = exports.signup = function signup(emailAddress, username, password) {
+var signup = exports.signup = function signup(emailAddress, password, username) {
   return function (dispatch, getState) {
     dispatch(signupRequest());
-    _api2.default.signup(emailAddress, username, password).then(function (payload) {
+    _api2.default.signup(emailAddress, password, username).then(function (payload) {
       saveToken(payload.token);
       dispatch(signupSuccess({
         isLoggedIn: true,
@@ -11654,17 +11675,17 @@ var post = function post(url, body) {
   });
 };
 
-var signup = function signup(emailAddress, username, password) {
+var signup = function signup(emailAddress, password, username) {
   return post(getEndpoint('signup'), {
     emailAddress: emailAddress,
-    username: username,
-    password: password
+    password: password,
+    username: username
   });
 };
 
-var login = function login(username, password) {
+var login = function login(emailAddress, password) {
   return post(getEndpoint('login'), {
-    username: username,
+    emailAddress: emailAddress,
     password: password
   });
 };
@@ -20503,6 +20524,8 @@ var _react = __webpack_require__(8);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRouter = __webpack_require__(100);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20517,12 +20540,7 @@ var Accounts = function (_React$Component) {
   function Accounts() {
     _classCallCheck(this, Accounts);
 
-    var _this = _possibleConstructorReturn(this, (Accounts.__proto__ || Object.getPrototypeOf(Accounts)).call(this));
-
-    _this.state = {
-      redirectToReferrer: false
-    };
-    return _this;
+    return _possibleConstructorReturn(this, (Accounts.__proto__ || Object.getPrototypeOf(Accounts)).apply(this, arguments));
   }
 
   _createClass(Accounts, [{
@@ -20536,7 +20554,11 @@ var Accounts = function (_React$Component) {
       return _react2.default.createElement(
         'li',
         { key: index },
-        account.id
+        _react2.default.createElement(
+          _reactRouter.Link,
+          { to: '/account/' + account.id },
+          account.emailAddress
+        )
       );
     }
   }, {
@@ -20544,6 +20566,20 @@ var Accounts = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
+      var accounts = function accounts() {
+        return _react2.default.createElement(
+          'ul',
+          null,
+          _this2.props.accounts.map(function (account, index) {
+            return _this2.renderAccount(account, index);
+          })
+        );
+      };
+      var content = this.props.isFetching ? _react2.default.createElement(
+        'div',
+        null,
+        'Loading...'
+      ) : accounts();
       return _react2.default.createElement(
         'div',
         null,
@@ -20552,13 +20588,7 @@ var Accounts = function (_React$Component) {
           null,
           'Accounts'
         ),
-        _react2.default.createElement(
-          'ul',
-          null,
-          this.props.accounts.map(function (account, index) {
-            return _this2.renderAccount(account, index);
-          })
-        )
+        content
       );
     }
   }]);
@@ -20567,8 +20597,9 @@ var Accounts = function (_React$Component) {
 }(_react2.default.Component);
 
 Accounts.propTypes = {
+  accounts: _react2.default.PropTypes.array.isRequired,
   getAccounts: _react2.default.PropTypes.func.isRequired,
-  accounts: _react2.default.PropTypes.array.isRequired
+  isFetching: _react2.default.PropTypes.bool.isRequired
 };
 
 Accounts.defaultProps = {
@@ -20624,7 +20655,7 @@ var ProtectedView = function ProtectedView() {
       pattern: '/',
       component: _Dashboard2.default
     }),
-    _react2.default.createElement(_reactRouter.Miss, { component: _Dashboard2.default
+    _react2.default.createElement(_reactRouter.Miss, { component: UnknownView
     })
   );
 };
@@ -20712,11 +20743,19 @@ var _Accounts = __webpack_require__(420);
 
 var _Accounts2 = _interopRequireDefault(_Accounts);
 
+var _Account = __webpack_require__(589);
+
+var _Account2 = _interopRequireDefault(_Account);
+
 var _AccessLogs = __webpack_require__(419);
 
 var _AccessLogs2 = _interopRequireDefault(_AccessLogs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var UnknownView = function UnknownView() {
+  return null;
+};
 
 var Dashboard = function Dashboard(_ref) {
   var pathname = _ref.pathname;
@@ -20768,10 +20807,16 @@ var Dashboard = function Dashboard(_ref) {
       pattern: '/access-logs'
     }),
     _react2.default.createElement(_reactRouter.Match, {
+      exactly: true,
       component: _Accounts2.default,
       pattern: '/accounts'
     }),
-    _react2.default.createElement(_reactRouter.Miss, { component: _Accounts2.default
+    _react2.default.createElement(_reactRouter.Match, {
+      exactly: true,
+      component: _Account2.default,
+      pattern: '/account/:accountId'
+    }),
+    _react2.default.createElement(_reactRouter.Miss, { component: UnknownView
     })
   );
 };
@@ -20854,9 +20899,9 @@ var Login = function (_Component) {
     key: 'handleSubmit',
     value: function handleSubmit(event) {
       event.preventDefault();
-      var username = this.refs.username.value;
+      var emailAddress = this.refs.emailAddress.value;
       var password = this.refs.password.value;
-      this.props.login(username, password);
+      this.props.login(emailAddress, password);
     }
   }, {
     key: 'render',
@@ -20881,8 +20926,8 @@ var Login = function (_Component) {
             'label',
             null,
             _react2.default.createElement('input', {
-              placeholder: 'Enter username',
-              ref: 'username',
+              placeholder: 'Enter email address',
+              ref: 'emailAddress',
               style: {
                 padding: '10px',
                 border: '1px solid #ccc',
@@ -20918,7 +20963,7 @@ var Login = function (_Component) {
           this.props.error && _react2.default.createElement(
             'p',
             null,
-            'Enter correct username & password'
+            'Enter correct email address & password'
           )
         )
       );
@@ -20979,9 +21024,9 @@ var Signup = function (_Component) {
     value: function handleSubmit(event) {
       event.preventDefault();
       var emailAddress = this.refs.emailAddress.value;
-      var username = this.refs.username.value;
       var password = this.refs.password.value;
-      this.props.signup(emailAddress, username, password);
+      var username = this.refs.username.value;
+      this.props.signup(emailAddress, password, username);
     }
   }, {
     key: 'render',
@@ -21136,6 +21181,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var select = function select(state) {
   return {
+    isFetching: state.app.isFetching,
     accounts: state.app.accounts
   };
 };
@@ -21205,8 +21251,8 @@ var select = function select(state) {
 };
 var actions = function actions(dispatch) {
   return {
-    login: function login(username, password) {
-      dispatch((0, _auth.login)(username, password));
+    login: function login(emailAddress, password) {
+      dispatch((0, _auth.login)(emailAddress, password));
     }
   };
 };
@@ -21241,8 +21287,8 @@ var select = function select(state) {
 };
 var actions = function actions(dispatch) {
   return {
-    signup: function signup(company, username, password) {
-      dispatch((0, _auth.signup)(company, username, password));
+    signup: function signup(emailAddress, password, username) {
+      dispatch((0, _auth.signup)(emailAddress, password, username));
     }
   };
 };
@@ -21303,19 +21349,33 @@ var app = function app() {
         user: {}
       });
     case _types2.default.ACCOUNT_REQUEST:
+    case _types2.default.ACCOUNTS_REQUEST:
       return (0, _objectAssign2.default)({}, state, {
         error: null,
         isFetching: true
       });
-    case _types2.default.ACCOUNT_SUCCESS:
+    case _types2.default.ACCOUNTS_SUCCESS:
       return (0, _objectAssign2.default)({}, state, {
         accounts: action.payload.accounts,
         error: true,
         isFetching: false
       });
+    case _types2.default.ACCOUNT_SUCCESS:
+      return (0, _objectAssign2.default)({}, state, {
+        account: action.payload.account,
+        error: true,
+        isFetching: false
+      });
+    case _types2.default.ACCOUNTS_FAILURE:
+      return (0, _objectAssign2.default)({}, state, {
+        account: {},
+        accounts: [],
+        error: true,
+        isFetching: false
+      });
     case _types2.default.ACCOUNT_FAILURE:
       return (0, _objectAssign2.default)({}, state, {
-        accounts: [],
+        account: {},
         error: true,
         isFetching: false
       });
@@ -40396,6 +40456,128 @@ Logout.propTypes = {
 };
 
 exports.default = Logout;
+
+/***/ },
+/* 588 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(8);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Account = function (_React$Component) {
+  _inherits(Account, _React$Component);
+
+  function Account() {
+    _classCallCheck(this, Account);
+
+    return _possibleConstructorReturn(this, (Account.__proto__ || Object.getPrototypeOf(Account)).apply(this, arguments));
+  }
+
+  _createClass(Account, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var accountId = this.props.params.accountId;
+      if (accountId) {
+        this.props.getAccount(this.props.params.accountId);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          isFetching = _props.isFetching,
+          account = _props.account;
+
+      var content = isFetching ? _react2.default.createElement(
+        'div',
+        null,
+        'Loading...'
+      ) : _react2.default.createElement(
+        'div',
+        null,
+        account.emailAddress
+      );
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'h2',
+          null,
+          'Account'
+        ),
+        content
+      );
+    }
+  }]);
+
+  return Account;
+}(_react2.default.Component);
+
+;
+
+Account.propTypes = {
+  account: _react2.default.PropTypes.object,
+  getAccount: _react2.default.PropTypes.func.isRequired,
+  isFetching: _react2.default.PropTypes.bool.isRequired,
+  params: _react2.default.PropTypes.object.isRequired
+};
+
+exports.default = Account;
+
+/***/ },
+/* 589 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Account = __webpack_require__(588);
+
+var _Account2 = _interopRequireDefault(_Account);
+
+var _app = __webpack_require__(127);
+
+var _reactRedux = __webpack_require__(66);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var select = function select(state) {
+  return {
+    isFetching: state.app.isFetching,
+    account: state.app.account
+  };
+};
+var actions = function actions(dispatch) {
+  return {
+    getAccount: function getAccount(accountId) {
+      dispatch((0, _app.getAccount)(accountId));
+    }
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(select, actions)(_Account2.default);
 
 /***/ }
 /******/ ]);

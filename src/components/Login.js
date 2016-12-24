@@ -7,9 +7,9 @@ class Login extends Component {
   }
   handleSubmit (event) {
     event.preventDefault();
-    const username = this.refs.username.value;
+    const emailAddress = this.refs.emailAddress.value;
     const password = this.refs.password.value;
-    this.props.login(username, password);
+    this.props.login(emailAddress, password);
   }
   render () {
     return (
@@ -23,8 +23,8 @@ class Login extends Component {
         <form onSubmit={this.handleSubmit}>
           <label>
             <input
-              placeholder='Enter username'
-              ref='username'
+              placeholder='Enter email address'
+              ref='emailAddress'
               style={{
                 padding: '10px',
                 border: '1px solid #ccc',
@@ -54,7 +54,7 @@ class Login extends Component {
             Login
           </button>
           {this.props.error && (
-            <p>Enter correct username & password</p>
+            <p>Enter correct email address & password</p>
           )}
         </form>
       </div>

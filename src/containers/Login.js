@@ -9,8 +9,8 @@ const select = (state) => {
 };
 const actions = (dispatch) => {
   return {
-    login: (username, password) => {
-      dispatch(login(username, password));
+    login: (emailAddress, password) => {
+      dispatch(login(emailAddress, password));
     }
   };
 };

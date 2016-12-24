@@ -2,7 +2,14 @@ import React from 'react';
 import { Match, Miss, Link } from 'react-router';
 import Logout from '../containers/Logout';
 import Accounts from '../containers/Accounts';
+import Account from '../containers/Account';
 import AccessLogs from '../containers/AccessLogs';
+
+const UnknownView = () => {
+  return (
+    null
+  );
+};
 
 const Dashboard = ({ pathname }) => (
   <div>
@@ -21,10 +28,16 @@ const Dashboard = ({ pathname }) => (
       pattern={`/access-logs`}
     />
     <Match
+      exactly
       component={Accounts}
       pattern={`/accounts`}
     />
-    <Miss component={Accounts}
+    <Match
+      exactly
+      component={Account}
+      pattern={`/account/:accountId`}
+    />
+    <Miss component={UnknownView}
     />
   </div>
 );

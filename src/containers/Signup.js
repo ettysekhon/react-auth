@@ -9,8 +9,8 @@ const select = (state) => {
 };
 const actions = (dispatch) => {
   return {
-    signup: (company, username, password) => {
-      dispatch(signup(company, username, password));
+    signup: (emailAddress, password, username) => {
+      dispatch(signup(emailAddress, password, username));
     }
   };
 };

@@ -4,44 +4,111 @@ const uuid = require('uuid');
 
 let users = [{
   id: uuid.v4(),
-  emailAddress: 'eric@blackfriday.com',
-  username: 'eric',
-  password: 'blackfriday'
+  emailAddress: 'eric.bernhard@dixonscarphone.com',
+  password: 'ericapp2017',
+  username: 'Eric'
 }];
 
 const accounts = [{
-  id: '10126442'
+  id: uuid.v4(),
+  emailAddress: 'account.1n@gmail.com',
+  password: '1234',
+  isEnabled: false,
+  device: {
+    brand: 'Apple',
+    deviceCountry: 'GB',
+    deviceId: 'iPhone8,1',
+    deviceLocale: 'en-GB',
+    deviceName: 'Vicki iPhone',
+    getSystemVersion: '9.1',
+    manufacturer: 'Apple',
+    model: 'iPhone 6s',
+    systemName: 'iPhone OS',
+    timezone: 'Europe/London',
+    uniqueId: '20EE620E-2578-4402-947C-5C0145D7DEB8',
+    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13B143'
+  }
 }, {
-  id: '18877428'
+  id: uuid.v4(),
+  emailAddress: 'account.2@gmail.com',
+  password: '2345',
+  isEnabled: false,
+  device: {
+    brand: 'Apple',
+    deviceCountry: 'GB',
+    deviceId: 'iPhone8,1',
+    deviceLocale: 'en-GB',
+    deviceName: 'Vicki iPhone',
+    getSystemVersion: '9.1',
+    manufacturer: 'Apple',
+    model: 'iPhone 6s',
+    systemName: 'iPhone OS',
+    timezone: 'Europe/London',
+    uniqueId: '20EE620E-2578-4402-947C-5C0145D7DEB8',
+    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13B143'
+  }
 }, {
-  id: '10137727'
+  id: uuid.v4(),
+  emailAddress: 'account.3@gmail.com',
+  password: '3456',
+  isEnabled: false,
+  device: {
+    brand: 'Apple',
+    deviceCountry: 'GB',
+    deviceId: 'iPhone8,1',
+    deviceLocale: 'en-GB',
+    deviceName: 'Vicki iPhone',
+    getSystemVersion: '9.1',
+    manufacturer: 'Apple',
+    model: 'iPhone 6s',
+    systemName: 'iPhone OS',
+    timezone: 'Europe/London',
+    uniqueId: '20EE620E-2578-4402-947C-5C0145D7DEB8',
+    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13B143'
+  }
 }, {
-  id: '10133883'
+  id: uuid.v4(),
+  emailAddress: 'account.4@gmail.com',
+  password: '4567',
+  device: {
+    brand: 'Apple',
+    deviceCountry: 'GB',
+    deviceId: 'iPhone8,1',
+    deviceLocale: 'en-GB',
+    deviceName: 'Vicki iPhone',
+    getSystemVersion: '9.1',
+    manufacturer: 'Apple',
+    model: 'iPhone 6s',
+    systemName: 'iPhone OS',
+    timezone: 'Europe/London',
+    uniqueId: '20EE620E-2578-4402-947C-5C0145D7DEB8',
+    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13B143'
+  }
 }];
 
-const findUser = (username, password) => {
+const findUser = (emailAddress, password) => {
   return (usr) => {
-    return usr.username === username && usr.password === password;
+    return usr.emailAddress === emailAddress && usr.password === password;
   };
 };
 
 const findAccount = (id) => {
-  return (usr) => {
-    return usr.id === id;
+  return (account) => {
+    return account.id === id;
   };
 };
 
 const user = {
-  login (username, password, cb) {
-    const result = users.find(findUser(username, password));
+  login (emailAddress, password, cb) {
+    const result = users.find(findUser(emailAddress, password));
     cb(null, result);
   },
-  signup (emailAddress, username, password, cb) {
+  signup (emailAddress, password, username, cb) {
     const usr = {
       id: uuid.v4(),
       emailAddress,
-      username,
-      password
+      password,
+      username
     };
     users = users.concat([usr]);
     cb(null, usr);
@@ -50,15 +117,12 @@ const user = {
 
 exports.login = (req, res, next) => {
   // TODO: check if user is already signed in!
+  const emailAddress = req.body.emailAddress;
   const password = req.body.password;
-  const username = req.body.username;
-  console.log('password', password);
-  console.log('username', username);
-  if (!password || !username) {
+  if (!emailAddress || !password) {
     return res.sendStatus(400);
   }
-
-  user.login(username, password, (err, usr) => {
+  user.login(emailAddress, password, (err, usr) => {
     if (err) {
       next(new Error('invalid user credentials', err));
       return;
@@ -86,12 +150,12 @@ exports.logout = (req, res, next) => {
 
 exports.signup = (req, res, next) => {
   const emailAddress = req.body.emailAddress;
-  const username = req.body.username;
   const password = req.body.password;
-  if (!emailAddress || !username || !password) {
+  const username = req.body.username;
+  if (!emailAddress || !password || !username) {
     res.sendStatus(400);
   } else {
-    user.signup(emailAddress, username, password, (err, usr) => {
+    user.signup(emailAddress, password, username, (err, usr) => {
       if (err) {
         return next(new Error('invalid user credentials', err));
       }

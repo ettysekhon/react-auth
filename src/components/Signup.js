@@ -8,9 +8,9 @@ class Signup extends Component {
   handleSubmit (event) {
     event.preventDefault();
     const emailAddress = this.refs.emailAddress.value;
-    const username = this.refs.username.value;
     const password = this.refs.password.value;
-    this.props.signup(emailAddress, username, password);
+    const username = this.refs.username.value;
+    this.props.signup(emailAddress, password, username);
   }
   render () {
     return (

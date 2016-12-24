@@ -89,17 +89,17 @@ const post = (url, body) => {
   });
 };
 
-const signup = (emailAddress, username, password) => {
+const signup = (emailAddress, password, username) => {
   return post(getEndpoint('signup'), {
     emailAddress,
-    username,
-    password
+    password,
+    username
   });
 };
 
-const login = (username, password) => {
+const login = (emailAddress, password) => {
   return post(getEndpoint('login'), {
-    username,
+    emailAddress,
     password
   });
 };

@@ -28,19 +28,33 @@ const app = (state = defaultState.app, action) => {
       user: {},
     });
   case ActionTypes.ACCOUNT_REQUEST:
+  case ActionTypes.ACCOUNTS_REQUEST:
     return objectAssign({}, state, {
       error: null,
       isFetching: true
     });
-  case ActionTypes.ACCOUNT_SUCCESS:
+  case ActionTypes.ACCOUNTS_SUCCESS:
     return objectAssign({}, state, {
       accounts: action.payload.accounts,
       error: true,
       isFetching: false
     });
+  case ActionTypes.ACCOUNT_SUCCESS:
+    return objectAssign({}, state, {
+      account: action.payload.account,
+      error: true,
+      isFetching: false
+    });
+  case ActionTypes.ACCOUNTS_FAILURE:
+    return objectAssign({}, state, {
+      account: {},
+      accounts: [],
+      error: true,
+      isFetching: false
+    });
   case ActionTypes.ACCOUNT_FAILURE:
     return objectAssign({}, state, {
-      accounts: [],
+      account: {},
       error: true,
       isFetching: false
     });

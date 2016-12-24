@@ -29,13 +29,13 @@ const nextRoute = (getState, path) => {
   }
 };
 
-export const login = (username, password) => {
+export const login = (emailAddress, password) => {
   return (dispatch, getState) => {
     dispatch(loginRequest({
-      username,
+      emailAddress,
       password
     }));
-    API.login(username, password)
+    API.login(emailAddress, password)
     .then((payload) => {
       saveToken(payload.token);
       dispatch(loginSuccess({
@@ -55,21 +55,22 @@ export const logout = () => {
     dispatch(logoutRequest({}));
     API.logout()
     .then(() => {
-      saveToken('');
       dispatch(logoutSuccess({}));
-      nextRoute(getState, '/');
-    }).catch((err) => {
-      saveToken('');
+    })
+    .catch((err) => {
       dispatch(logoutFailure(null, err));
+    })
+    .then(() => {
+      saveToken('');
       nextRoute(getState, '/');
     });
   };
 };
 
-export const signup = (emailAddress, username, password) => {
+export const signup = (emailAddress, password, username) => {
   return (dispatch, getState) => {
     dispatch(signupRequest());
-    API.signup(emailAddress, username, password)
+    API.signup(emailAddress, password, username)
     .then((payload) => {
       saveToken(payload.token);
       dispatch(signupSuccess({

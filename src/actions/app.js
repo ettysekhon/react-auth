@@ -6,6 +6,10 @@ const accountRequest = createAction(ActionTypes.ACCOUNT_REQUEST);
 const accountSuccess = createAction(ActionTypes.ACCOUNT_SUCCESS);
 const accountFailure = createAction(ActionTypes.ACCOUNT_FAILURE);
 
+const accountsRequest = createAction(ActionTypes.ACCOUNTS_REQUEST);
+const accountsSuccess = createAction(ActionTypes.ACCOUNTS_SUCCESS);
+const accountsFailure = createAction(ActionTypes.ACCOUNTS_FAILURE);
+
 const logsRequest = createAction(ActionTypes.LOGS_REQUEST);
 const logsSuccess = createAction(ActionTypes.LOGS_SUCCESS);
 const logsFailure = createAction(ActionTypes.LOGS_FAILURE);
@@ -23,13 +27,28 @@ export const setRouter = (router) => {
   };
 };
 
-export const getAccounts = (username, password) => {
+export const getAccounts = () => {
+  return (dispatch, getState) => {
+    dispatch(accountsRequest());
+    API.getAccounts()
+    .then((payload) => {
+      dispatch(accountsSuccess({
+        accounts: payload.accounts
+      }));
+    }).catch((err) => {
+      // if error was a 403 then redirect ?
+      dispatch(accountsFailure(null, err));
+    });
+  };
+};
+
+export const getAccount = (accountId) => {
   return (dispatch, getState) => {
     dispatch(accountRequest());
-    API.getAccounts(username, password)
+    API.getAccount(accountId)
     .then((payload) => {
       dispatch(accountSuccess({
-        accounts: payload.accounts
+        account: payload.account
       }));
     }).catch((err) => {
       // if error was a 403 then redirect ?
