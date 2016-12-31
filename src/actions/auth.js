@@ -52,7 +52,7 @@ export const login = (emailAddress, password) => {
 
 export const logout = () => {
   return (dispatch, getState) => {
-    dispatch(logoutRequest({}));
+    dispatch(logoutRequest());
     API.logout()
     .then(() => {
       dispatch(logoutSuccess({}));

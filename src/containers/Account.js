@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 
 const select = (state) => {
   return {
-    isFetching: state.app.isFetching,
-    account: state.app.account
+    isFetching: state.app.isFetching
   };
 };
 const actions = (dispatch) => {

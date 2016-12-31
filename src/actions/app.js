@@ -6,6 +6,14 @@ const accountRequest = createAction(ActionTypes.ACCOUNT_REQUEST);
 const accountSuccess = createAction(ActionTypes.ACCOUNT_SUCCESS);
 const accountFailure = createAction(ActionTypes.ACCOUNT_FAILURE);
 
+const updateAccountRequest = createAction(ActionTypes.UPDATE_ACCOUNT_REQUEST);
+const updateAccountSuccess = createAction(ActionTypes.UPDATE_ACCOUNT_SUCCESS);
+const updateAccountFailure = createAction(ActionTypes.UPDATE_ACCOUNT_FAILURE);
+
+const deleteAccountRequest = createAction(ActionTypes.DELETE_ACCOUNT_REQUEST);
+const deleteAccountSuccess = createAction(ActionTypes.DELETE_ACCOUNT_SUCCESS);
+const deleteAccountFailure = createAction(ActionTypes.DELETE_ACCOUNT_FAILURE);
+
 const accountsRequest = createAction(ActionTypes.ACCOUNTS_REQUEST);
 const accountsSuccess = createAction(ActionTypes.ACCOUNTS_SUCCESS);
 const accountsFailure = createAction(ActionTypes.ACCOUNTS_FAILURE);
@@ -44,7 +52,9 @@ export const getAccounts = () => {
 
 export const getAccount = (accountId) => {
   return (dispatch, getState) => {
-    dispatch(accountRequest());
+    dispatch(accountRequest({
+      accountId
+    }));
     API.getAccount(accountId)
     .then((payload) => {
       dispatch(accountSuccess({
@@ -53,6 +63,42 @@ export const getAccount = (accountId) => {
     }).catch((err) => {
       // if error was a 403 then redirect ?
       dispatch(accountFailure(null, err));
+    });
+  };
+};
+
+export const deleteAccount = (accountId) => {
+  return (dispatch, getState) => {
+    dispatch(deleteAccountRequest({
+      accountId
+    }));
+    API.deleteAccount(accountId)
+    .then((payload) => {
+      dispatch(deleteAccountSuccess());
+    }).catch((err) => {
+      // if error was a 403 then redirect ?
+      dispatch(deleteAccountFailure(null, err));
+    });
+  };
+};
+
+export const updateAccount = (values) => {
+  return (dispatch, getState) => {
+    const updatedAccount = {
+      accountId: values.id,
+      emailAddress: values.emailAddress,
+      password: values.password,
+      isEnabled: values.isEnabled
+    };
+    dispatch(updateAccountRequest(updatedAccount));
+    API.updateAccount(values.id, updatedAccount)
+    .then((payload) => {
+      dispatch(updateAccountSuccess({
+        account: payload.account
+      }));
+    }).catch((err) => {
+      // if error was a 403 then redirect ?
+      dispatch(updateAccountFailure(null, err));
     });
   };
 };
@@ -74,7 +120,10 @@ export const getLogs = () => {
 
 export const registerInterest = (emailAddress, mobile) => {
   return (dispatch, getState) => {
-    dispatch(registerInterestRequest());
+    dispatch(registerInterestRequest({
+      emailAddress,
+      mobile
+    }));
     API.registerInterest(emailAddress, mobile)
     .then((payload) => {
       dispatch(registerInterestSuccess());

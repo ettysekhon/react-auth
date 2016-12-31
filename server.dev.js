@@ -1,5 +1,6 @@
 import path from 'path';
 import express from 'express';
+import favicon from 'serve-favicon';
 // const _ = require('lodash');
 // const fs = require('fs');
 // const baseTemplate = fs.readFileSync('./index.html');
@@ -11,6 +12,8 @@ const port = process.env.PORT || 3001;
 const setCacheControl = (res) => {
   res.setHeader('Cache-Control', 'public, max-age=31536000, no-cache');
 };
+
+app.use(favicon(`${__dirname}/favicon.ico`));
 
 app.use(express.static(path.join(__dirname, 'dist'), {
   setHeaders: setCacheControl

@@ -1,4 +1,5 @@
 import React from 'react';
+import AccountForm from './forms/AccountForm';
 
 class Account extends React.Component {
   componentDidMount () {
@@ -8,10 +9,10 @@ class Account extends React.Component {
     }
   }
   render () {
-    const { isFetching, account } = this.props;
+    const { isFetching } = this.props;
     const content = isFetching
       ? (<div>{'Loading...'}</div>)
-      : (<div>{account.emailAddress}</div>);
+      : (<AccountForm />);
     return (
       <div>
         <h2>Account</h2>
@@ -22,7 +23,6 @@ class Account extends React.Component {
 };
 
 Account.propTypes = {
-  account: React.PropTypes.object,
   getAccount: React.PropTypes.func.isRequired,
   isFetching: React.PropTypes.bool.isRequired,
   params: React.PropTypes.object.isRequired

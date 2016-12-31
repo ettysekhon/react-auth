@@ -1,19 +1,23 @@
 const config = require('./config');
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid');
+const deleteArrItem = (arr, index) => arr.slice(0, index).concat(arr.slice(index + 1));
 
 let users = [{
   id: uuid.v4(),
   emailAddress: 'eric.bernhard@dixonscarphone.com',
   password: 'ericapp2017',
-  username: 'Eric'
+  displayName: 'Eric',
+  isAdmin: true
 }];
 
-const accounts = [{
+let accounts = [{
   id: uuid.v4(),
   emailAddress: 'account.1n@gmail.com',
   password: '1234',
-  isEnabled: false,
+  isEnabled: true,
+  loginFailure: 0,
+  created: new Date(),
   device: {
     brand: 'Apple',
     deviceCountry: 'GB',
@@ -33,6 +37,8 @@ const accounts = [{
   emailAddress: 'account.2@gmail.com',
   password: '2345',
   isEnabled: false,
+  loginFailure: 0,
+  created: new Date(),
   device: {
     brand: 'Apple',
     deviceCountry: 'GB',
@@ -52,6 +58,8 @@ const accounts = [{
   emailAddress: 'account.3@gmail.com',
   password: '3456',
   isEnabled: false,
+  loginFailure: 0,
+  created: new Date(),
   device: {
     brand: 'Apple',
     deviceCountry: 'GB',
@@ -70,6 +78,9 @@ const accounts = [{
   id: uuid.v4(),
   emailAddress: 'account.4@gmail.com',
   password: '4567',
+  isEnabled: false,
+  loginFailure: 0,
+  created: new Date(),
   device: {
     brand: 'Apple',
     deviceCountry: 'GB',
@@ -199,10 +210,40 @@ exports.getAccount = (req, res, next) => {
 };
 
 exports.putAccount = (req, res, next) => {
-  res.sendStatus(200);
+  const accountId = req.params.id;
+  const account = accounts.find(findAccount(accountId));
+  if (!account) {
+    return res.sendStatus(404);
+  }
+  const updatedAccount = Object.assign({}, account, {
+    emailAddress: req.body.emailAddress || '',
+    password: req.body.password || '',
+    isEnabled: req.body.isEnabled || false
+  });
+
+  // update accounts
+  accounts = accounts.map((acc) => acc.id === accountId ? updatedAccount : acc);
+
+  res.json({
+    payload: {
+      account: updatedAccount
+    }
+  });
 };
 
 exports.deleteAccount = (req, res, next) => {
+  const accountId = req.params.id;
+  const index = accounts.findIndex((i) => {
+    console.log('i.id', i.id);
+    console.log('accountId', accountId);
+    console.log('match', i.id === accountId);
+    return i.id === accountId;
+  });
+  console.log('index', index);
+  if (index === -1) {
+    return res.sendStatus(401);
+  }
+  accounts = deleteArrItem(accounts, index);
   res.sendStatus(200);
 };
 

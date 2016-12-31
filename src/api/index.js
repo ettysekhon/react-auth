@@ -18,7 +18,6 @@ const getHeaders = () => {
     'X-Requested-With': 'XMLHttpRequest',
     'Authorization': `Bearer ${token}`
   });
-  console.log('headers', headers);
   return headers;
 };
 
@@ -46,37 +45,18 @@ const getPayload = (json) => {
     : json.payload;
 };
 
-/* eslint-disable no-unused-vars */
-const get = (url) => {
+const request = (method, url, body) => {
+  var payload = {
+    method: method || 'GET',
+    mode: 'cors',
+    credentials: 'include',
+    headers: getHeaders()
+  };
+  if (body) {
+    payload.body = JSON.stringify(body);
+  }
   return new Promise((resolve, reject) => {
-    fetch(url, {
-      mode: 'cors',
-      credentials: 'include',
-      headers: getHeaders()
-    })
-    .then(status)
-    .then(getJson)
-    .then(getPayload)
-    .then((payload) => {
-      resolve(payload);
-    })
-    .catch((err) => {
-      console.log('API error', err);
-      reject(err);
-    });
-  });
-};
-/* eslint-enable no-unused-vars */
-
-const post = (url, body) => {
-  return new Promise((resolve, reject) => {
-    fetch(url, {
-      method: 'POST',
-      mode: 'cors',
-      credentials: 'include',
-      headers: getHeaders(),
-      body: JSON.stringify(body)
-    })
+    fetch(url, payload)
     .then(status)
     .then(getJson)
     .then(getPayload)
@@ -90,7 +70,7 @@ const post = (url, body) => {
 };
 
 const signup = (emailAddress, password, username) => {
-  return post(getEndpoint('signup'), {
+  return request('POST', getEndpoint('signup'), {
     emailAddress,
     password,
     username
@@ -98,34 +78,34 @@ const signup = (emailAddress, password, username) => {
 };
 
 const login = (emailAddress, password) => {
-  return post(getEndpoint('login'), {
+  return request('POST', getEndpoint('login'), {
     emailAddress,
     password
   });
 };
 
 const getAccounts = () => {
-  return get(getEndpoint('accounts'));
+  return request('GET', getEndpoint('accounts'));
 };
 
 const getAccount = (id) => {
-  return get(getEndpoint(`accounts/${id}`));
+  return request('GET', getEndpoint(`accounts/${id}`));
 };
 
 const getLogs = (id) => {
-  return get(getEndpoint(`logs`));
+  return request('GET', getEndpoint(`logs`));
 };
 
-const updateAccount = (id) => {
-  return get(getEndpoint(`accounts/${id}`));
+const updateAccount = (id, values) => {
+  return request('PUT', getEndpoint(`accounts/${id}`), values);
 };
 
 const deleteAccount = (id) => {
-  return get(getEndpoint(`accounts/${id}`));
+  return request('DELETE', getEndpoint(`accounts/${id}`));
 };
 
 const logout = (id) => {
-  return post(getEndpoint(`logout`));
+  return request('POST', getEndpoint(`logout`));
 };
 
 export default {

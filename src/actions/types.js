@@ -5,6 +5,14 @@ module.exports = {
   ACCOUNT_SUCCESS: 'ACCOUNT_SUCCESS',
   ACCOUNT_FAILURE: 'ACCOUNT_FAILURE',
   // -------------------------------------------------------------------------->
+  UPDATE_ACCOUNT_REQUEST: 'UPDATE_ACCOUNT_REQUEST',
+  UPDATE_ACCOUNT_SUCCESS: 'UPDATE_ACCOUNT_SUCCESS',
+  UPDATE_ACCOUNT_FAILURE: 'UPDATE_ACCOUNT_FAILURE',
+  // -------------------------------------------------------------------------->
+  DELETE_ACCOUNT_REQUEST: 'DELETE_ACCOUNT_REQUEST',
+  DELETE_ACCOUNT_SUCCESS: 'DELETE_ACCOUNT_SUCCESS',
+  DELETE_ACCOUNT_FAILURE: 'DELETE_ACCOUNT_FAILURE',
+  // -------------------------------------------------------------------------->
   ACCOUNTS_REQUEST: 'ACCOUNTS_REQUEST',
   ACCOUNTS_SUCCESS: 'ACCOUNTS_SUCCESS',
   ACCOUNTS_FAILURE: 'ACCOUNTS_FAILURE',
